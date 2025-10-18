@@ -63,7 +63,7 @@ export function SkillCard({ skill }: SkillCardProps) {
             {skill.skill_name || skill.name}
           </h3>
           <p className={`text-sm line-clamp-3 leading-relaxed ${textColorClass ? textColorClass.replace('950', '800').replace('50', '200') : 'text-muted-foreground'}`}>
-            {skill.description || 'Explore this skill through practice problems'}
+            {skill.skill_description}
           </p>
         </div>
 

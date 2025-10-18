@@ -37,7 +37,7 @@ export default async function GenerateProblemPage({ params }: GeneratePageProps)
       <GenerateProblemClient
         skillId={skill.skill_id?.toString() || skillId}
         skillName={skill.skill_name || ''}
-        skillDescription={skill.description || ''}
+        skillDescription={skill.skill_description || ''}
         userId={userId}
       />
     </div>

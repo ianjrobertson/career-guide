@@ -79,7 +79,7 @@ export function ContinueLearning({ userId = 'mock-user-1' }: ContinueLearningPro
                   </div>
                 </div>
                 <Button asChild size="sm" className="ml-4 shrink-0">
-                  <Link href={`/protected/skills`}>
+                  <Link href={`/protected/learn/generate/${suggestion.skill.id}`}>
                     Try It
                   </Link>
                 </Button>
