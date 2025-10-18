@@ -31,17 +31,43 @@ export function OnboardingForm() {
   const currentStepIndex = steps.indexOf(currentStep);
   const progress = ((currentStepIndex + 1) / steps.length) * 100;
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (currentStep === "welcome") {
       setCurrentStep("major");
     } else if (currentStep === "major" && selectedMajorId) {
       setCurrentStep("skills");
     } else if (currentStep === "skills" && selectedSkillIds.length >= 3) {
       // Save onboarding data
-      console.log(selectedMajorId, selectedSkillIds);
+      setIsLoading(true);
+      try {
+        // Get current user
+        const { data: { user } } = await supabase.auth.getUser();
 
-      // Redirect to skills browser or dashboard
-      router.push("/protected");
+        if (user) {
+          // Update profile to mark onboarding as complete
+          const { error: profileError } = await supabase
+            .from('profiles')
+            .update({ onboarded: true })
+            .eq('id', user.id);
+
+          if (profileError) {
+            console.error('Error updating profile:', profileError);
+            setError('Failed to save onboarding data');
+            setIsLoading(false);
+            return;
+          }
+
+          console.log('Onboarding completed:', { selectedMajorId, selectedSkillIds });
+
+          // Redirect to dashboard
+          router.push("/protected");
+        }
+      } catch (err) {
+        console.error('Error during onboarding completion:', err);
+        setError('An error occurred. Please try again.');
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -239,9 +265,9 @@ export function OnboardingForm() {
 
           <Button
             onClick={handleNext}
-            disabled={!canProceed()}
+            disabled={!canProceed() || loading}
           >
-            {currentStep === "skills" ? "Start Exploring" : "Next"}
+            {loading && currentStep === "skills" ? "Saving..." : currentStep === "skills" ? "Start Exploring" : "Next"}
             {currentStep !== "skills" && <ChevronRight className="h-4 w-4 ml-2" />}
           </Button>
         </CardContent>
