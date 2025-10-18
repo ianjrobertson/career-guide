@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import { Lightbulb, Sparkles, Target, TrendingUp } from "lucide-react";
+import { FlaskConical, Lightbulb, Sparkles, Target, TrendingUp } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function Home() {
@@ -24,7 +24,7 @@ export default async function Home() {
       <nav className="w-full border-b border-b-foreground/10">
         <div className="max-w-7xl mx-auto flex justify-between items-center p-4 px-6">
           <div className="flex items-center gap-2">
-            <Lightbulb className="h-6 w-6" />
+            <FlaskConical className="h-6 w-6" />
             <span className="font-bold text-xl">Major Labs</span>
           </div>
           <AuthButton />
