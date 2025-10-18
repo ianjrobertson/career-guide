@@ -24,13 +24,6 @@ const QUICK_ACTIONS: QuickAction[] = [
     href: '/protected/progress',
     icon: TrendingUp,
     color: 'text-green-500'
-  },
-  {
-    title: 'Profile',
-    description: 'Manage your account',
-    href: '/protected/profile',
-    icon: User,
-    color: 'text-purple-500'
   }
 ];
 
@@ -40,14 +33,14 @@ export function QuickActions() {
       {QUICK_ACTIONS.map((action) => {
         const Icon = action.icon;
         return (
-          <Card key={action.href} className="hover:shadow-md transition-shadow">
-            <CardContent className="p-6">
-              <Link href={action.href} className="block">
-                <div className="flex flex-col items-start gap-3">
+          <Card key={action.href} className="hover:shadow-md transition-shadow h-full flex flex-col">
+            <CardContent className="p-6 flex-1 flex flex-col justify-center">
+              <Link href={action.href} className="block h-full">
+                <div className="flex flex-col items-start gap-3 h-full justify-center">
                   <div className={`${action.color} bg-accent p-3 rounded-lg`}>
                     <Icon size={24} />
                   </div>
-                  <div>
+                  <div className="flex-1 flex flex-col justify-center">
                     <h3 className="font-semibold text-base mb-1">
                       {action.title}
                     </h3>

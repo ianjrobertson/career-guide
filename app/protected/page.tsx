@@ -1,12 +1,11 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { BookOpen } from "lucide-react";
+import { BookOpen, TrendingUp } from "lucide-react";
 import { StatsCard } from "@/components/dashboard/stats-card";
 import { RecommendationsPreview } from "@/components/dashboard/recommendations-preview";
-import { ContinueLearning } from "@/components/dashboard/continue-learning";
 import { RecentActivity } from "@/components/dashboard/recent-activity";
-import { QuickActions } from "@/components/dashboard/quick-actions";
 import { getEncouragementMessage } from "@/lib/dashboard-helpers";
+import Link from "next/link";
 
 export default async function ProtectedPage() {
   const supabase = await createClient();
@@ -51,8 +50,8 @@ export default async function ProtectedPage() {
         </p>
       </div>
 
-      {/* Stats Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* Top Bar: Stats Overview + Quick Links */}
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
         <StatsCard
           title="Skills Explored"
           value={questions?.length ?? 0}
@@ -60,19 +59,32 @@ export default async function ProtectedPage() {
           icon={BookOpen}
           iconColor="text-blue-500"
         />
+        {/* Browse Skills Card - now using StatsCard */}
+        <StatsCard
+          title="Browse Skills"
+          value={''}
+          description="Explore new skills to try"
+          icon={BookOpen}
+          iconColor="text-blue-500"
+        />
+        <Link href="/protected/skills" className="absolute inset-0" tabIndex={-1} aria-label="Browse Skills" />
+        {/* View Progress Card - now using StatsCard */}
+        <StatsCard
+          title="View Progress"
+          value={''}
+          description="See your learning journey"
+          icon={TrendingUp}
+          iconColor="text-green-500"
+        />
+        <Link href="/protected/progress" className="absolute inset-0" tabIndex={-1} aria-label="View Progress" />
       </div>
 
-      {/* Main Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Continue Learning Section */}
-        <div className="space-y-6">
-          <ContinueLearning userId={user.id} />
-          <QuickActions />
-        </div>
-
-        {/* Recommendations & Activity */}
-        <div className="space-y-6">
+      {/* Main Content Grid - rearranged to fill space */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+        <div className="h-full flex flex-col">
           <RecommendationsPreview userId={user.id} />
+        </div>
+        <div className="h-full flex flex-col">
           <RecentActivity userId={user.id} limit={5} />
         </div>
       </div>

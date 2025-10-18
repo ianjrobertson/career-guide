@@ -12,12 +12,19 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Search, X } from 'lucide-react';
-import { MOCK_MAJORS } from '@/lib/mock-data';
+import { createClient } from '@/lib/supabase/client';
 import { useState, useEffect, useCallback } from 'react';
+
+interface Major {
+  major_id: number;
+  major_name: string;
+  major_description?: string;
+}
 
 export function SkillsFilters() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [majors, setMajors] = useState<Major[]>([]);
 
   // Get current filter values from URL
   const currentSearch = searchParams.get('search') || '';
@@ -26,7 +33,40 @@ export function SkillsFilters() {
   // Local state for search input (for debouncing)
   const [searchQuery, setSearchQuery] = useState(currentSearch);
 
-  const majors = MOCK_MAJORS;
+  // Fetch majors from Supabase
+  useEffect(() => {
+    const fetchMajors = async () => {
+      const supabase = createClient();
+      
+      try {
+        console.log('Fetching majors...');
+        const { data: majorsData, error } = await supabase
+          .from('majors')
+          .select('major_id, major_name')
+          .order('major_name');
+
+        if (error) {
+          throw error;
+        }
+
+        console.log('Raw majors data:', majorsData);
+        
+        if (!majorsData || majorsData.length === 0) {
+          console.log('No majors found in the database');
+          setMajors([]);
+          return;
+        }
+
+        setMajors(majorsData);
+
+      } catch (err) {
+        console.error('Error fetching majors:', err);
+        setMajors([]);
+      }
+    };
+
+    fetchMajors();
+  }, []);
 
   // Update URL search params
   const updateFilters = useCallback((updates: Record<string, string>) => {
@@ -91,8 +131,8 @@ export function SkillsFilters() {
           <SelectContent>
             <SelectItem value="all">All Majors</SelectItem>
             {majors.map((major) => (
-              <SelectItem key={major.id} value={major.id}>
-                {major.name}
+              <SelectItem key={major.major_id} value={major.major_id.toString()}>
+                {major.major_name}
               </SelectItem>
             ))}
           </SelectContent>
@@ -131,7 +171,7 @@ export function SkillsFilters() {
           )}
           {currentMajor && (
             <Badge variant="secondary" className="gap-1">
-              Major: {majors.find(m => m.id === currentMajor)?.name}
+              Major: {majors.find(m => m.major_id.toString() === currentMajor)?.major_name}
               <button
                 onClick={() => updateFilters({ major: '' })}
                 className="ml-1 hover:bg-muted-foreground/20 rounded-full p-0.5"
