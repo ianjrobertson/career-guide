@@ -295,3 +295,228 @@ export function getOnboardingData(): OnboardingData | null {
 export function hasCompletedOnboarding(): boolean {
   return getOnboardingData() !== null;
 }
+
+// Practice Problems Mock Data
+export interface PracticeProblem {
+  id: string;
+  skill_id: string;
+  title: string;
+  description: string;
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  content: string;
+  solution_hints: string[];
+  generated_by_ai: boolean;
+  created_at: string;
+}
+
+export const MOCK_PRACTICE_PROBLEMS: PracticeProblem[] = [
+  {
+    id: 'problem-1',
+    skill_id: 'skill-3',
+    title: 'Analyzing Coffee Shop Survey Data',
+    description: 'Work with customer feedback data to make business recommendations',
+    difficulty: 'beginner',
+    content: 'You work for a coffee shop chain. Review this customer survey data and identify which age group is most satisfied and what improvements to prioritize.',
+    solution_hints: ['Look for patterns in age groups', 'Consider satisfaction ratings'],
+    generated_by_ai: true,
+    created_at: '2025-10-15T10:00:00Z'
+  },
+  {
+    id: 'problem-2',
+    skill_id: 'skill-16',
+    title: 'Writing a Character Backstory',
+    description: 'Create a compelling character with depth and motivation',
+    difficulty: 'beginner',
+    content: 'Write a 200-word backstory for a character who just discovered they have an unusual ability. Focus on their emotional journey.',
+    solution_hints: ['Start with a key moment', 'Show emotion through actions'],
+    generated_by_ai: true,
+    created_at: '2025-10-14T14:30:00Z'
+  },
+  {
+    id: 'problem-3',
+    skill_id: 'skill-1',
+    title: 'Optimizing a Campus Route',
+    description: 'Find the most efficient path between classes',
+    difficulty: 'beginner',
+    content: 'You have 4 classes across campus with 10-minute breaks. Plan the optimal route considering walking time, building locations, and break times.',
+    solution_hints: ['Map out the locations', 'Consider time constraints'],
+    generated_by_ai: true,
+    created_at: '2025-10-13T09:15:00Z'
+  },
+  {
+    id: 'problem-4',
+    skill_id: 'skill-21',
+    title: 'Designing a Student Event Poster',
+    description: 'Create a visual layout for a campus event',
+    difficulty: 'beginner',
+    content: 'Design a poster layout for a fall festival. Consider hierarchy, color scheme, and how to make key information (date, time, location) stand out.',
+    solution_hints: ['Think about visual hierarchy', 'Use contrast for important details'],
+    generated_by_ai: true,
+    created_at: '2025-10-12T16:45:00Z'
+  },
+  {
+    id: 'problem-5',
+    skill_id: 'skill-5',
+    title: 'Campus Club Growth Strategy',
+    description: 'Develop a plan to grow a student organization',
+    difficulty: 'beginner',
+    content: 'Your club has 15 members. Create a 3-month strategy to double membership while maintaining engagement.',
+    solution_hints: ['Consider different outreach channels', 'Think about retention'],
+    generated_by_ai: true,
+    created_at: '2025-10-11T11:20:00Z'
+  }
+];
+
+// User Problem Attempts Mock Data
+export interface UserProblemAttempt {
+  id: string;
+  user_id: string;
+  problem_id: string;
+  skill_id: string;
+  enjoyment_rating: number; // 1-5
+  difficulty_rating: number; // 1-5
+  completed: boolean;
+  time_spent_minutes: number;
+  notes: string;
+  created_at: string;
+}
+
+export const MOCK_USER_ATTEMPTS: UserProblemAttempt[] = [
+  {
+    id: 'attempt-1',
+    user_id: 'mock-user-1',
+    problem_id: 'problem-3',
+    skill_id: 'skill-1',
+    enjoyment_rating: 5,
+    difficulty_rating: 2,
+    completed: true,
+    time_spent_minutes: 25,
+    notes: 'This was fun! I loved figuring out the most efficient route.',
+    created_at: '2025-10-13T10:00:00Z'
+  },
+  {
+    id: 'attempt-2',
+    user_id: 'mock-user-1',
+    problem_id: 'problem-2',
+    skill_id: 'skill-16',
+    enjoyment_rating: 4,
+    difficulty_rating: 3,
+    completed: true,
+    time_spent_minutes: 35,
+    notes: 'Creative writing is harder than I thought, but I enjoyed it.',
+    created_at: '2025-10-14T15:00:00Z'
+  },
+  {
+    id: 'attempt-3',
+    user_id: 'mock-user-1',
+    problem_id: 'problem-1',
+    skill_id: 'skill-3',
+    enjoyment_rating: 5,
+    difficulty_rating: 2,
+    completed: true,
+    time_spent_minutes: 30,
+    notes: 'I really enjoyed working with data and finding patterns!',
+    created_at: '2025-10-15T11:00:00Z'
+  },
+  {
+    id: 'attempt-4',
+    user_id: 'mock-user-1',
+    problem_id: 'problem-4',
+    skill_id: 'skill-21',
+    enjoyment_rating: 3,
+    difficulty_rating: 4,
+    completed: true,
+    time_spent_minutes: 40,
+    notes: 'Design is interesting but challenging for me.',
+    created_at: '2025-10-12T17:30:00Z'
+  }
+];
+
+// Major Recommendations Mock Data
+export interface MajorRecommendation {
+  id: string;
+  user_id: string;
+  major_id: string;
+  match_score: number; // 0-100
+  recommended_at: string;
+  viewed: boolean;
+  matching_skills: string[]; // skill IDs that contributed to the match
+}
+
+export const MOCK_RECOMMENDATIONS: MajorRecommendation[] = [
+  {
+    id: 'rec-1',
+    user_id: 'mock-user-1',
+    major_id: 'major-1', // Computer Science
+    match_score: 92,
+    recommended_at: '2025-10-15T12:00:00Z',
+    viewed: false,
+    matching_skills: ['skill-1', 'skill-3']
+  },
+  {
+    id: 'rec-2',
+    user_id: 'mock-user-1',
+    major_id: 'major-8', // Economics
+    match_score: 85,
+    recommended_at: '2025-10-15T12:00:00Z',
+    viewed: false,
+    matching_skills: ['skill-1', 'skill-3']
+  },
+  {
+    id: 'rec-3',
+    user_id: 'mock-user-1',
+    major_id: 'major-2', // Business Administration
+    match_score: 78,
+    recommended_at: '2025-10-15T12:00:00Z',
+    viewed: false,
+    matching_skills: ['skill-3']
+  },
+  {
+    id: 'rec-4',
+    user_id: 'mock-user-1',
+    major_id: 'major-5', // English Literature
+    match_score: 72,
+    recommended_at: '2025-10-15T12:00:00Z',
+    viewed: false,
+    matching_skills: ['skill-16']
+  }
+];
+
+// User Profile Mock Data
+export interface UserProfile {
+  id: string;
+  full_name: string;
+  year: string;
+  current_major: string | null;
+  interests: string[];
+  created_at: string;
+  updated_at: string;
+}
+
+export const MOCK_USER_PROFILE: UserProfile = {
+  id: 'mock-user-1',
+  full_name: 'Alex Johnson',
+  year: 'freshman',
+  current_major: null,
+  interests: ['technology', 'problem-solving', 'creative writing'],
+  created_at: '2025-10-10T08:00:00Z',
+  updated_at: '2025-10-15T12:00:00Z'
+};
+
+// Helper functions for mock data
+export function getProblemById(problemId: string): PracticeProblem | undefined {
+  return MOCK_PRACTICE_PROBLEMS.find(p => p.id === problemId);
+}
+
+export function getSkillById(skillId: string): Skill | undefined {
+  return MOCK_SKILLS.find(s => s.id === skillId);
+}
+
+export function getUserAttempts(userId: string = 'mock-user-1'): UserProblemAttempt[] {
+  return MOCK_USER_ATTEMPTS.filter(a => a.user_id === userId);
+}
+
+export function getUserRecommendations(userId: string = 'mock-user-1'): MajorRecommendation[] {
+  return MOCK_RECOMMENDATIONS.filter(r => r.user_id === userId)
+    .sort((a, b) => b.match_score - a.match_score);
+}
