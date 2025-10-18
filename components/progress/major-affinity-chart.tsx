@@ -63,12 +63,13 @@ export function MajorAffinityChart({ distributions }: MajorAffinityChartProps) {
       <CardHeader>
         <CardTitle>Which Majors Match Your Interests?</CardTitle>
         <CardDescription>
-          Based on the skills you've tried and enjoyed
+          Based on the skills you&apos;ve tried and enjoyed
         </CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
           <BarChart
+            className='flex justify-center'
             data={chartData}
             margin={{
               top: 20,
