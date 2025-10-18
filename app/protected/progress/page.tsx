@@ -21,11 +21,96 @@ export default async function ProgressPage() {
     redirect('/auth/login');
   }
 
+  const { data: { user } } = await supabase.auth.getUser();
+
+  const getQuestions = async (userId: string) => {
+      const {data: questions, error: questionsError } = await supabase
+      .from('assessment_questions_score')
+      .select(`
+        skill_id,
+        skills!inner(
+          skill_id,
+          skill_name,
+          major_skills_mapping!inner(
+            major_id,
+            majors!inner(
+              major_id,
+              major_name
+            )
+          )
+        )
+      `)
+      .eq('student_id', userId);
+
+      if (questionsError) {
+        console.log('Error fetching questions:', questionsError)
+      }
+      return questions;
+  }
+
   // Get progress data
-  const userId = 'mock-user-1';
-  const distributions = getTopMajorsByAffinity(userId, 8);
-  const insights = getProgressInsights(userId);
-  const stats = getProgressOverviewStats(userId);
+  let distributions = getTopMajorsByAffinity('mock-user-1', 8);
+  let stats = getProgressOverviewStats('mock-user-1');
+
+  if (user?.id) {
+      const questions = await getQuestions(user?.id);
+
+      // Map the results to create a distribution of majors
+      if (questions && questions.length > 0) {
+        const majorDistribution = new Map<string, { majorId: string, majorName: string, count: number, skills: Set<string> }>();
+
+        questions.forEach((question: any) => {
+          const skill = question.skills;
+          if (skill?.major_skills_mapping) {
+            skill.major_skills_mapping.forEach((mapping: any) => {
+              const major = mapping.majors;
+              if (major) {
+                const key = major.major_id;
+                if (!majorDistribution.has(key)) {
+                  majorDistribution.set(key, {
+                    majorId: major.major_id,
+                    majorName: major.major_name,
+                    count: 0,
+                    skills: new Set()
+                  });
+                }
+                const dist = majorDistribution.get(key)!;
+                dist.count += 1;
+                dist.skills.add(skill.skill_id);
+              }
+            });
+          }
+        });
+
+        // Convert to array and sort by count
+        const distributionArray = Array.from(majorDistribution.values())
+          .map(d => ({
+            majorId: d.majorId,
+            majorName: d.majorName,
+            questionCount: d.count,
+            uniqueSkills: d.skills.size,
+            liked: d.count, // Will need actual like/dislike data
+            disliked: 0
+          }))
+          .sort((a, b) => b.questionCount - a.questionCount)
+          .slice(0, 8);
+
+        console.log('Major Distribution:', distributionArray);
+
+        // Update stats with real data
+        stats = {
+          totalSkillsExplored: new Set(questions.map((q: any) => q.skill_id)).size,
+          totalMajorsExplored: majorDistribution.size,
+          topMajorName: distributionArray[0]?.majorName || null,
+          topMajorAffinity: distributionArray[0]
+            ? Math.round((distributionArray[0].questionCount / questions.length) * 100)
+            : null
+        };
+
+        // Use real distribution data
+        distributions = distributionArray;
+      }
+  }
 
   const hasData = stats.totalSkillsExplored > 0;
 
@@ -128,9 +213,6 @@ export default async function ProgressPage() {
 
           {/* Main Chart */}
           <MajorAffinityChart distributions={distributions} />
-
-          {/* Insights */}
-          <ProgressInsights insights={insights} />
 
           {/* CTA Section */}
           <div className="flex justify-center pt-4">
