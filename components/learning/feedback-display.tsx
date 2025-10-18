@@ -2,9 +2,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { CheckCircle2, Sparkles } from 'lucide-react';
 import type { ProblemFeedback } from '@/lib/mock-data';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Confetti from 'react-confetti';
-import { useRef } from 'react';
 
 interface FeedbackDisplayProps {
   feedback: {
@@ -53,9 +52,11 @@ export function FeedbackDisplay({ feedback }: FeedbackDisplayProps) {
           <Confetti
             width={window.innerWidth}
             height={window.innerHeight}
-            numberOfPieces={200}
+            numberOfPieces={500}
             recycle={false}
-            gravity={0.3}
+            gravity={0.4}
+            initialVelocityX={15}
+            initialVelocityY={30}
           />
         </div>
       )}

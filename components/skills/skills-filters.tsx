@@ -13,7 +13,6 @@ import {
 } from '@/components/ui/select';
 import { Search, X } from 'lucide-react';
 import { MOCK_MAJORS } from '@/lib/mock-data';
-import { getUniqueCategories } from '@/lib/skills-helpers';
 import { useState, useEffect, useCallback } from 'react';
 
 export function SkillsFilters() {
@@ -23,12 +22,10 @@ export function SkillsFilters() {
   // Get current filter values from URL
   const currentSearch = searchParams.get('search') || '';
   const currentMajor = searchParams.get('major') || '';
-  const currentCategory = searchParams.get('category') || '';
 
   // Local state for search input (for debouncing)
   const [searchQuery, setSearchQuery] = useState(currentSearch);
 
-  const categories = getUniqueCategories();
   const majors = MOCK_MAJORS;
 
   // Update URL search params
@@ -65,7 +62,7 @@ export function SkillsFilters() {
     router.push('/protected/skills');
   };
 
-  const hasActiveFilters = currentSearch || currentMajor || currentCategory;
+  const hasActiveFilters = currentSearch || currentMajor;
 
   return (
     <div className="space-y-4">
@@ -114,27 +111,6 @@ export function SkillsFilters() {
         )}
       </div>
 
-      {/* Category Filter Buttons */}
-      <div className="flex flex-wrap gap-2">
-        <Button
-          variant={currentCategory === '' ? 'default' : 'outline'}
-          size="sm"
-          onClick={() => updateFilters({ category: '' })}
-        >
-          All Categories
-        </Button>
-        {categories.map((category) => (
-          <Button
-            key={category}
-            variant={currentCategory === category ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => updateFilters({ category })}
-          >
-            {category}
-          </Button>
-        ))}
-      </div>
-
       {/* Active Filters Display */}
       {hasActiveFilters && (
         <div className="flex flex-wrap items-center gap-2">
@@ -158,17 +134,6 @@ export function SkillsFilters() {
               Major: {majors.find(m => m.id === currentMajor)?.name}
               <button
                 onClick={() => updateFilters({ major: '' })}
-                className="ml-1 hover:bg-muted-foreground/20 rounded-full p-0.5"
-              >
-                <X size={12} />
-              </button>
-            </Badge>
-          )}
-          {currentCategory && (
-            <Badge variant="secondary" className="gap-1">
-              Category: {currentCategory}
-              <button
-                onClick={() => updateFilters({ category: '' })}
                 className="ml-1 hover:bg-muted-foreground/20 rounded-full p-0.5"
               >
                 <X size={12} />

@@ -1,9 +1,10 @@
 export async function addAssessmentQuestionScore(
-    {accuracy_score_0to1, feedback, question, skill_id}: {
+    {accuracy_score_0to1, feedback, question, skill_id, user_liked}: {
       accuracy_score_0to1?: number|null;
       feedback?: string | null;
       question?: string | null;
       skill_id?: number | null;
+      user_liked?: boolean | null;
     }) {
   const response = await fetch('/api/assessment', {
     method: 'POST',
@@ -15,6 +16,7 @@ export async function addAssessmentQuestionScore(
       feedback,
       question,
       skill_id,
+      user_liked,
     }),
   });
 

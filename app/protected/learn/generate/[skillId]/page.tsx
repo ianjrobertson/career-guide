@@ -20,10 +20,14 @@ export default async function GenerateProblemPage({ params }: GeneratePageProps)
 
   const { skillId } = await params;
 
-  // Fetch skill data
-  const skill = getSkillById(skillId);
+  // Fetch skill data from Supabase
+  const { data: skill, error: skillError } = await supabase
+    .from('skills')
+    .select('*')
+    .eq('skill_id', skillId)
+    .single();
 
-  if (!skill) {
+  if (skillError || !skill) {
     redirect('/protected/skills');
   }
 
@@ -32,9 +36,9 @@ export default async function GenerateProblemPage({ params }: GeneratePageProps)
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <GenerateProblemClient
-        skillId={skill.id}
-        skillName={skill.name}
-        skillDescription={skill.description}
+        skillId={skill.skill_id?.toString() || skillId}
+        skillName={skill.skill_name || ''}
+        skillDescription={skill.description || ''}
         userId={userId}
       />
     </div>
