@@ -1,6 +1,5 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
-import { getSkillById } from '@/lib/mock-data';
 import { GenerateProblemClient } from '@/components/learning/generate-problem-client';
 
 interface GeneratePageProps {

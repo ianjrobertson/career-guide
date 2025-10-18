@@ -2,8 +2,6 @@ import {
   getUserAttempts,
   getSkillById,
   MOCK_MAJORS,
-  type UserProblemAttempt,
-  type Major
 } from './mock-data';
 
 // Major distribution interface

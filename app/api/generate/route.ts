@@ -26,6 +26,6 @@ export async function POST(request: Request) {
 
   } catch (error) {
     return NextResponse.json(
-        {error: 'Failed to process request'}, {status: 500});
+        {error: `${error instanceof Error ? error.message : "Error occured! Uh oh"}`}, {status: 500});
   }
 }

@@ -1,7 +1,7 @@
 import { AuthButton } from "@/components/auth-button";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import Link from "next/link";
-import { Home, BookOpen, TrendingUp, User, Icon, FlaskConical } from "lucide-react";
+import { Home, BookOpen, TrendingUp, User, FlaskConical } from "lucide-react";
 
 const NAV_LINKS = [
   {

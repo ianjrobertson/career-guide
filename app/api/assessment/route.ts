@@ -1,6 +1,15 @@
 import {createClient} from '@/lib/supabase/server';
 import {NextResponse} from 'next/server';
 
+export interface assessment {
+  accuracy_score_0to1: number,
+  feedback: string,
+  question: string,
+  skill_id: number,
+  user_liked: boolean,
+  student_id?: string,
+}
+
 export async function POST(request: Request) {
   try {
     const supabase = await createClient();
@@ -30,7 +39,7 @@ export async function POST(request: Request) {
         body;
 
     // Prepare insert data
-    const insertData: any = {
+    const insertData: assessment = {
       accuracy_score_0to1,
       feedback,
       question,
