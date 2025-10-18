@@ -27,18 +27,36 @@ Instead of traditional career quizzes, students learn by doing:
 ```
 career-guide/
 ├── app/                          # Next.js App Router
-│   ├── page.tsx                 # Landing page
+│   ├── page.tsx                 # Landing page (public)
 │   ├── layout.tsx               # Root layout
-│   ├── auth/                    # Authentication pages
+│   ├── routes.md                # Route documentation
+│   ├── auth/                    # Authentication pages (public)
 │   │   ├── login/
 │   │   ├── sign-up/
 │   │   ├── forgot-password/
 │   │   └── confirm/
-│   └── protected/               # Protected routes (requires auth)
-│       ├── page.tsx             # Main dashboard
-│       └── layout.tsx
+│   └── protected/               # ALL authenticated routes go here
+│       ├── page.tsx             # Dashboard/home (main landing after login)
+│       ├── layout.tsx           # Shared layout with navigation
+│       ├── onboarding/          # New user setup
+│       │   └── page.tsx
+│       ├── skills/              # Skills browser (to be built)
+│       │   └── page.tsx
+│       ├── learn/               # Learning interface (to be built)
+│       │   └── [problemId]/
+│       │       └── page.tsx
+│       ├── progress/            # Progress visualization (to be built)
+│       │   └── page.tsx
+│       ├── recommendations/     # Major recommendations (to be built)
+│       │   └── page.tsx
+│       └── profile/             # User profile (to be built)
+│           └── page.tsx
 ├── components/                   # React components
 │   ├── ui/                      # shadcn/ui base components
+│   ├── onboarding/              # Onboarding flow components
+│   │   ├── onboarding-form.tsx
+│   │   ├── major-selector.tsx
+│   │   └── skill-selector.tsx
 │   ├── auth-button.tsx
 │   ├── login-form.tsx
 │   ├── sign-up-form.tsx
@@ -48,8 +66,9 @@ career-guide/
 │   │   ├── client.ts           # Browser client
 │   │   ├── server.ts           # Server-side client
 │   │   └── middleware.ts       # Auth middleware
+│   ├── mock-data.ts            # Mock data for development (majors, skills)
 │   └── utils.ts                # Shared utilities
-├── middleware.ts               # Next.js middleware (auth)
+├── middleware.ts               # Next.js middleware (auth protection)
 └── .env                        # Environment variables
 ```
 
