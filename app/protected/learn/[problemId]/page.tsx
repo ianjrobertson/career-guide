@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import { notFound } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { LearningContainer } from '@/components/learning/learning-container';
+import { AIGeneratedLearning } from '@/components/learning/ai-generated-learning';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
@@ -29,9 +30,15 @@ export default async function LearnPage({ params }: LearnPageProps) {
   // Await params (Next.js 15 requirement)
   const { problemId } = await params;
 
+  const userId = 'mock-user-1'; // In real app, get from auth
+
+  // Check if this is an AI-generated problem (starts with 'problem-ai-')
+  if (problemId.startsWith('problem-ai-')) {
+    return <AIGeneratedLearning problemId={problemId} userId={userId} />;
+  }
+
   // For now, if problemId looks like a skill ID (starts with 'skill-'),
-  // redirect to the first problem for that skill
-  // This handles clicks from the skills browser
+  // redirect to generate a new problem for that skill
   if (problemId.startsWith('skill-')) {
     const skillProblems = MOCK_PRACTICE_PROBLEMS.filter(
       (p) => p.skill_id === problemId
@@ -41,8 +48,8 @@ export default async function LearnPage({ params }: LearnPageProps) {
       // Redirect to the first problem for this skill
       redirect(`/protected/learn/${skillProblems[0].id}`);
     } else {
-      // No problems for this skill, redirect to skills browser
-      redirect('/protected/skills');
+      // No problems for this skill, redirect to generate page
+      redirect(`/protected/learn/generate/${problemId}`);
     }
   }
 
@@ -59,8 +66,6 @@ export default async function LearnPage({ params }: LearnPageProps) {
   if (!skill) {
     notFound();
   }
-
-  const userId = 'mock-user-1'; // In real app, get from auth
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">

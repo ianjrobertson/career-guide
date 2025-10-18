@@ -20,6 +20,7 @@ import {
   isAnswerValid as checkAnswerValid,
   type LearningState
 } from '@/lib/learning-helpers';
+import { getFeedbackFromWebhook } from '@/lib/learning-helpers';
 
 interface LearningContainerProps {
   problem: PracticeProblem;
@@ -31,7 +32,6 @@ export function LearningContainer({ problem, skill, userId }: LearningContainerP
   // State management
   const [state, setState] = useState<LearningState>('answering');
   const [answer, setAnswer] = useState('');
-  const [thoughts, setThoughts] = useState('');
   const [feedback, setFeedback] = useState<ProblemFeedback | null>(null);
   const [encouragement, setEncouragement] = useState('');
   const [startTime] = useState(Date.now());
@@ -42,20 +42,19 @@ export function LearningContainer({ problem, skill, userId }: LearningContainerP
     const draft = loadDraft(problem.id);
     if (draft) {
       setAnswer(draft.answer);
-      setThoughts(draft.thoughts);
     }
   }, [problem.id]);
 
   // Auto-save draft
   useEffect(() => {
-    if (state === 'answering' && (answer || thoughts)) {
+    if (state === 'answering' && answer) {
       const timer = setTimeout(() => {
-        saveDraft(problem.id, answer, thoughts);
+        saveDraft(problem.id, answer, '');
       }, 1000); // Debounce 1 second
 
       return () => clearTimeout(timer);
     }
-  }, [answer, thoughts, problem.id, state]);
+  }, [answer, problem.id, state]);
 
   // Update elapsed time
   useEffect(() => {
@@ -69,19 +68,16 @@ export function LearningContainer({ problem, skill, userId }: LearningContainerP
   // Handle submit for feedback
   const handleSubmitForFeedback = useCallback(async () => {
     if (!checkAnswerValid(answer)) return;
-
     setState('grading');
-
     try {
-      const feedbackData = await getAIFeedback(problem.id, answer, skill.id);
+      const feedbackData = await getFeedbackFromWebhook(problem, answer, skill.id);
       setFeedback(feedbackData);
       setState('graded');
     } catch (error) {
       console.error('Error getting feedback:', error);
-      // Fallback to answering state on error
       setState('answering');
     }
-  }, [answer, problem.id, skill.id]);
+  }, [answer, problem, skill.id]);
 
   // Handle rating submission
   const handleSubmitRating = useCallback(
@@ -95,7 +91,7 @@ export function LearningContainer({ problem, skill, userId }: LearningContainerP
         problemId: problem.id,
         skillId: skill.id,
         userAnswer: answer,
-        thoughts,
+        thoughts: '',
         liked,
         timeSpentMinutes: timeSpent
       });
@@ -107,7 +103,7 @@ export function LearningContainer({ problem, skill, userId }: LearningContainerP
       setEncouragement(encouragementMsg);
       setState('completed');
     },
-    [startTime, userId, problem.id, skill.id, answer, thoughts]
+    [startTime, userId, problem.id, skill.id, answer]
   );
 
   return (
@@ -138,9 +134,7 @@ export function LearningContainer({ problem, skill, userId }: LearningContainerP
       {(state === 'answering' || state === 'grading') && (
         <AnswerWorkspace
           answer={answer}
-          thoughts={thoughts}
           onAnswerChange={setAnswer}
-          onThoughtsChange={setThoughts}
           onSubmit={handleSubmitForFeedback}
           isGrading={state === 'grading'}
           isAnswerValid={checkAnswerValid(answer)}

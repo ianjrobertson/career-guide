@@ -7,9 +7,7 @@ import { Loader2 } from 'lucide-react';
 
 interface AnswerWorkspaceProps {
   answer: string;
-  thoughts: string;
   onAnswerChange: (value: string) => void;
-  onThoughtsChange: (value: string) => void;
   onSubmit: () => void;
   isGrading: boolean;
   isAnswerValid: boolean;
@@ -17,9 +15,7 @@ interface AnswerWorkspaceProps {
 
 export function AnswerWorkspace({
   answer,
-  thoughts,
   onAnswerChange,
-  onThoughtsChange,
   onSubmit,
   isGrading,
   isAnswerValid
@@ -55,24 +51,6 @@ export function AnswerWorkspace({
               </span>
             )}
           </div>
-        </div>
-
-        {/* Thoughts/Notes Textarea */}
-        <div className="space-y-2">
-          <label htmlFor="thoughts" className="text-sm font-medium">
-            Your thoughts (optional)
-          </label>
-          <Textarea
-            id="thoughts"
-            placeholder="How did you approach this? What was challenging? Any other reflections?"
-            value={thoughts}
-            onChange={(e) => onThoughtsChange(e.target.value)}
-            className="min-h-[100px] resize-y"
-            disabled={isGrading}
-          />
-          <p className="text-xs text-muted-foreground">
-            Share your thought process - this helps us understand your experience
-          </p>
         </div>
 
         {/* Submit Button */}
