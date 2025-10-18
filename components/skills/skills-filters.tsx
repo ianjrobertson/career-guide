@@ -21,12 +21,12 @@ export function SkillsFilters() {
 
   // Get current filter values from URL
   const currentSearch = searchParams.get('search') || '';
-  const currentMajor = searchParams.get('major') || '';
+  // const currentMajor = searchParams.get('major') || '';
 
   // Local state for search input (for debouncing)
   const [searchQuery, setSearchQuery] = useState(currentSearch);
 
-  const majors = MOCK_MAJORS;
+  // const majors = MOCK_MAJORS;
 
   // Update URL search params
   const updateFilters = useCallback((updates: Record<string, string>) => {
@@ -62,11 +62,11 @@ export function SkillsFilters() {
     router.push('/protected/skills');
   };
 
-  const hasActiveFilters = currentSearch || currentMajor;
+  const hasActiveFilters = !!currentSearch;
 
   return (
     <div className="space-y-4">
-      {/* Search and Major Filter Row */}
+      {/* Search Row Only */}
       <div className="flex flex-col md:flex-row gap-3">
         {/* Search */}
         <div className="relative flex-1">
@@ -79,24 +79,6 @@ export function SkillsFilters() {
             className="pl-10"
           />
         </div>
-
-        {/* Major Filter */}
-        <Select
-          value={currentMajor || 'all'}
-          onValueChange={(value) => updateFilters({ major: value === 'all' ? '' : value })}
-        >
-          <SelectTrigger className="w-full md:w-[280px]">
-            <SelectValue placeholder="Filter by major" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Majors</SelectItem>
-            {majors.map((major) => (
-              <SelectItem key={major.id} value={major.id}>
-                {major.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
 
         {/* Clear Filters */}
         {hasActiveFilters && (
@@ -123,17 +105,6 @@ export function SkillsFilters() {
                   setSearchQuery('');
                   updateFilters({ search: '' });
                 }}
-                className="ml-1 hover:bg-muted-foreground/20 rounded-full p-0.5"
-              >
-                <X size={12} />
-              </button>
-            </Badge>
-          )}
-          {currentMajor && (
-            <Badge variant="secondary" className="gap-1">
-              Major: {majors.find(m => m.id === currentMajor)?.name}
-              <button
-                onClick={() => updateFilters({ major: '' })}
                 className="ml-1 hover:bg-muted-foreground/20 rounded-full p-0.5"
               >
                 <X size={12} />

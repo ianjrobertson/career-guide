@@ -32,7 +32,7 @@ export default async function SkillsPage({ searchParams }: SkillsPageProps) {
 
   // Parse search params
   const currentPage = parseInt(params.page || '1', 10);
-  const selectedMajor = params.major || '';
+  // const selectedMajor = params.major || '';
   const searchQuery = params.search || '';
 
 
@@ -84,7 +84,7 @@ export default async function SkillsPage({ searchParams }: SkillsPageProps) {
 
   // Apply filters
   const filters: SkillFilters = {
-    majorIds: selectedMajor ? [selectedMajor] : [],
+    majorIds: [],
     category: null,
     searchQuery: searchQuery || undefined
   };
