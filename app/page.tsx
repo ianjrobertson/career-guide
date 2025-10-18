@@ -5,8 +5,19 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { Lightbulb, Sparkles, Target, TrendingUp } from "lucide-react";
+import { createClient } from "@/lib/supabase/server";
 
-export default function Home() {
+export default async function Home() {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  // If user is authenticated, link to the app; otherwise link to auth pages
+  const primaryLink = user ? "/protected" : "/auth/sign-up";
+  const secondaryLink = user ? "/protected/skills" : "/auth/login";
+  const primaryText = user ? "Go to Dashboard" : "Start Exploring";
+  const secondaryText = user ? "Browse Skills" : "Sign In";
+  const ctaLink = user ? "/protected/skills" : "/auth/sign-up";
+  const ctaText = user ? "Explore Skills" : "Get Started Free";
   return (
     <main className="min-h-screen flex flex-col">
       {/* Navigation */}
@@ -40,10 +51,10 @@ export default function Home() {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
             <Button size="lg" asChild className="text-lg">
-              <Link href="/auth/sign-up">Start Exploring</Link>
+              <Link href={primaryLink}>{primaryText}</Link>
             </Button>
             <Button size="lg" variant="outline" asChild className="text-lg">
-              <Link href="/auth/login">Sign In</Link>
+              <Link href={secondaryLink}>{secondaryText}</Link>
             </Button>
           </div>
         </div>
@@ -169,7 +180,7 @@ export default function Home() {
             Join students exploring careers through real experience.
           </p>
           <Button size="lg" variant="secondary" asChild className="text-lg">
-            <Link href="/auth/sign-up">Get Started Free</Link>
+            <Link href={ctaLink}>{ctaText}</Link>
           </Button>
         </div>
       </section>
