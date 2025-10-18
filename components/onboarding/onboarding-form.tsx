@@ -36,7 +36,7 @@ export function OnboardingForm() {
       });
 
       // Redirect to skills browser or dashboard
-      router.push("/skills");
+      router.push("/protected");
     }
   };
 
