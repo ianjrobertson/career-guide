@@ -25,14 +25,15 @@ export function useMajors(): UseMajorsReturn {
                 setLoading(true);
                 const supabase = createClient();
 
-                const { data, error } = await supabase
+                
+                const { data: majors, error } = await supabase
                     .from('majors')
-                    .select('*')
-                    .order('name');
+                    .select('*');
+
 
                 if (error) throw error;
 
-                setMajors(data || []);
+                setMajors(majors || []);
                 setError(null);
             } catch (err) {
                 setError(err instanceof Error ? err : new Error('Failed to fetch majors'));

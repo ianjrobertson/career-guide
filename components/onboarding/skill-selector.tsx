@@ -1,15 +1,18 @@
 "use client";
 
-import { Skill } from "@/lib/mock-data";
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+export interface Skill {
+  skill_id: number,
+  skill_name: string,
+}
+
 interface SkillSelectorProps {
   skills: Skill[];
-  selectedSkillIds: string[];
-  onSelect: (skillIds: string[]) => void;
+  selectedSkillIds: number[];
+  onSelect: (skillIds: number[]) => void;
   minRequired: number;
   maxAllowed: number;
 }
@@ -21,7 +24,7 @@ export function SkillSelector({
   minRequired,
   maxAllowed,
 }: SkillSelectorProps) {
-  const handleToggle = (skillId: string) => {
+  const handleToggle = (skillId: number) => {
     if (selectedSkillIds.includes(skillId)) {
       // Deselect
       onSelect(selectedSkillIds.filter((id) => id !== skillId));
@@ -67,18 +70,18 @@ export function SkillSelector({
       {/* Skills Grid */}
       <div className="grid md:grid-cols-2 gap-3">
         {skills.map((skill) => {
-          const isSelected = selectedSkillIds.includes(skill.id);
+          const isSelected = selectedSkillIds.includes(skill.skill_id);
           const isDisabled = !isSelected && !canSelectMore;
 
           return (
             <Card
-              key={skill.id}
+              key={skill.skill_id}
               className={cn(
                 "cursor-pointer transition-all hover:shadow-md",
                 isSelected && "ring-2 ring-primary bg-primary/5",
                 isDisabled && "opacity-50 cursor-not-allowed"
               )}
-              onClick={() => !isDisabled && handleToggle(skill.id)}
+              onClick={() => !isDisabled && handleToggle(skill.skill_id)}
             >
               <CardHeader className="relative p-4">
                 {isSelected && (
@@ -87,15 +90,9 @@ export function SkillSelector({
                   </div>
                 )}
                 <div className="space-y-1.5">
-                  <Badge variant="outline" className="w-fit text-xs">
-                    {skill.category}
-                  </Badge>
                   <CardTitle className="text-base leading-tight">
-                    {skill.name}
+                    {skill.skill_name}
                   </CardTitle>
-                  <CardDescription className="text-xs">
-                    {skill.description}
-                  </CardDescription>
                 </div>
               </CardHeader>
             </Card>

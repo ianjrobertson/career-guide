@@ -1,22 +1,31 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { MajorSelector } from "./major-selector";
 import { SkillSelector } from "./skill-selector";
-import { saveOnboardingData, getSkillsByMajorId } from "@/lib/mock-data";
 import { Lightbulb, ChevronLeft, ChevronRight } from "lucide-react";
+import { createClient } from "@/lib/supabase/client";
 
 type Step = "welcome" | "major" | "skills";
 
+interface Skill {
+  skill_id: number;
+  skill_name: string;
+}
+
 export function OnboardingForm() {
+  const supabase = createClient();
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState<Step>("welcome");
-  const [selectedMajorId, setSelectedMajorId] = useState<string>("");
-  const [selectedSkillIds, setSelectedSkillIds] = useState<string[]>([]);
+  const [selectedMajorId, setSelectedMajorId] = useState<number>(0);
+  const [selectedSkillIds, setSelectedSkillIds] = useState<number[]>([]);
+  const [availableSkills, setAvailableSkills] = useState<Skill[]>([]);
+  const [loading, setIsLoading ] = useState(false);
+  const [error, setError] = useState<string | null>('');
 
   const steps: Step[] = ["welcome", "major", "skills"];
   const currentStepIndex = steps.indexOf(currentStep);
@@ -29,16 +38,51 @@ export function OnboardingForm() {
       setCurrentStep("skills");
     } else if (currentStep === "skills" && selectedSkillIds.length >= 3) {
       // Save onboarding data
-      saveOnboardingData({
-        majorId: selectedMajorId,
-        skillIds: selectedSkillIds,
-        completedAt: new Date().toISOString()
-      });
+      console.log(selectedMajorId, selectedSkillIds);
 
       // Redirect to skills browser or dashboard
       router.push("/protected");
     }
   };
+
+  const getSkillsByMajor = useCallback(async (majorId: number)  => {
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      const { data: skillMappings, error } = await supabase
+        .from('major_skills_mapping')
+        .select('skills!inner(skill_id, skill_name)')
+        .eq('major_id', majorId);
+
+      if (error) throw error;
+
+      console.log('Raw data:', skillMappings);
+
+      // Transform the nested data structure to flat array of skills
+      const transformedSkills = skillMappings?.map((mapping: any) => ({
+        skill_id: mapping.skills.skill_id,
+        skill_name: mapping.skills.skill_name
+      })) || [];
+
+      console.log('Transformed skills:', transformedSkills);
+
+      setAvailableSkills(transformedSkills);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load skills');
+      console.error('Error fetching skills:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [supabase]);
+
+  useEffect(() => {
+    if (selectedMajorId) {
+      getSkillsByMajor(selectedMajorId);
+    } else {
+      setAvailableSkills([]);
+    }
+  }, [selectedMajorId, getSkillsByMajor]);
 
   const handleBack = () => {
     if (currentStep === "skills") {
@@ -50,12 +94,10 @@ export function OnboardingForm() {
 
   const canProceed = () => {
     if (currentStep === "welcome") return true;
-    if (currentStep === "major") return selectedMajorId !== "";
+    if (currentStep === "major") return selectedMajorId !== 0;
     if (currentStep === "skills") return selectedSkillIds.length >= 3;
     return false;
   };
-
-  const availableSkills = selectedMajorId ? getSkillsByMajorId(selectedMajorId) : [];
 
   return (
     <div className="space-y-6">
@@ -150,13 +192,36 @@ export function OnboardingForm() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <SkillSelector
-                skills={availableSkills}
-                selectedSkillIds={selectedSkillIds}
-                onSelect={setSelectedSkillIds}
-                minRequired={3}
-                maxAllowed={5}
-              />
+              {loading && (
+                <div className="flex items-center justify-center py-12">
+                  <div className="text-center space-y-4">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+                    <p className="text-sm text-muted-foreground">Loading skills...</p>
+                  </div>
+                </div>
+              )}
+
+              {error && !loading && (
+                <div className="text-center py-12">
+                  <p className="text-destructive mb-4">{error}</p>
+                  <Button
+                    variant="outline"
+                    onClick={() => getSkillsByMajor(selectedMajorId)}
+                  >
+                    Try again
+                  </Button>
+                </div>
+              )}
+
+              {!loading && !error && (
+                <SkillSelector
+                  skills={availableSkills}
+                  selectedSkillIds={selectedSkillIds}
+                  onSelect={setSelectedSkillIds}
+                  minRequired={3}
+                  maxAllowed={5}
+                />
+              )}
             </CardContent>
           </>
         )}
