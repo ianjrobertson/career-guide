@@ -4,6 +4,7 @@ import { CheckCircle2, Sparkles } from 'lucide-react';
 import type { ProblemFeedback } from '@/lib/mock-data';
 import { useEffect, useState } from 'react';
 import Confetti from 'react-confetti';
+import { useRef } from 'react';
 
 interface FeedbackDisplayProps {
   feedback: {
@@ -16,25 +17,47 @@ interface FeedbackDisplayProps {
 
 export function FeedbackDisplay({ feedback }: FeedbackDisplayProps) {
   const [showConfetti, setShowConfetti] = useState(false);
+  const [fadeConfetti, setFadeConfetti] = useState(false);
+  const confettiRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (feedback.accuracy_score === 1) {
       setShowConfetti(true);
-      const timer = setTimeout(() => setShowConfetti(false), 4000);
-      return () => clearTimeout(timer);
+      setFadeConfetti(false);
+      const fadeTimer = setTimeout(() => setFadeConfetti(true), 3500);
+      const removeTimer = setTimeout(() => setShowConfetti(false), 4000);
+      return () => {
+        clearTimeout(fadeTimer);
+        clearTimeout(removeTimer);
+      };
     }
   }, [feedback.accuracy_score]);
 
   return (
     <>
       {showConfetti && (
-        <Confetti
-          width={window.innerWidth}
-          height={window.innerHeight}
-          numberOfPieces={200}
-          recycle={false}
-          gravity={0.3}
-        />
+        <div
+          ref={confettiRef}
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            pointerEvents: 'none',
+            opacity: fadeConfetti ? 0 : 1,
+            transition: 'opacity 0.5s ease',
+            zIndex: 50
+          }}
+        >
+          <Confetti
+            width={window.innerWidth}
+            height={window.innerHeight}
+            numberOfPieces={200}
+            recycle={false}
+            gravity={0.3}
+          />
+        </div>
       )}
       <Card className="border-2 border-primary/20">
         <CardHeader>
