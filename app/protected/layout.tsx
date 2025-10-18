@@ -1,7 +1,7 @@
 import { AuthButton } from "@/components/auth-button";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import Link from "next/link";
-import { Home, BookOpen, TrendingUp, User, FlaskConical } from "lucide-react";
+import { Home, BookOpen, TrendingUp, FlaskConical } from "lucide-react";
 
 const NAV_LINKS = [
   {
@@ -18,11 +18,6 @@ const NAV_LINKS = [
     href: "/protected/progress",
     label: "Progress",
     icon: TrendingUp
-  },
-  {
-    href: "/protected/profile",
-    label: "Profile",
-    icon: User
   }
 ];
 

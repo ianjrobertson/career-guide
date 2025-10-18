@@ -88,7 +88,9 @@ export async function RecentActivity({ userId = 'mock-user-1', limit = 5 }: Rece
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
                   <h3 className="font-medium text-sm truncate">
-                    {question.skills?.[0]?.skill_name || 'Unknown Skill'}
+                    
+                    {// eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    (question.skills as any)?.skill_name || 'Unknown Skill'}
                   </h3>
                   <Badge variant="outline" className="text-xs shrink-0">
                     {question.accuracy_score_0to1 !== null ? 'Completed' : 'In Progress'}
