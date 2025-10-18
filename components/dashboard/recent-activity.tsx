@@ -1,18 +1,52 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Clock, Star } from 'lucide-react';
-import { getRecentActivity } from '@/lib/dashboard-helpers';
-import { formatTimeSpent } from '@/lib/dashboard-helpers';
+import { createClient } from '@/lib/supabase/server';
 
 interface RecentActivityProps {
   userId?: string;
   limit?: number;
 }
 
-export function RecentActivity({ userId = 'mock-user-1', limit = 5 }: RecentActivityProps) {
-  const activities = getRecentActivity(userId, limit);
+function formatTimeAgo(dateString: string): string {
+  const date = new Date(dateString);
+  const now = new Date();
+  const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
 
-  if (activities.length === 0) {
+  if (seconds < 60) return 'just now';
+  if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
+  if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
+  if (seconds < 604800) return `${Math.floor(seconds / 86400)}d ago`;
+  return `${Math.floor(seconds / 604800)}w ago`;
+}
+
+
+export async function RecentActivity({ userId = 'mock-user-1', limit = 5 }: RecentActivityProps) {
+  const supabase = await createClient();
+
+  // Query recent questions with skill information
+  const { data: questions, error: questionsError } = await supabase
+    .from('assessment_questions_score')
+    .select(`
+      assessment_id,
+      student_id,
+      skill_id,
+      accuracy_score_0to1,
+      created_at,
+      skills!inner(
+        skill_id,
+        skill_name
+      )
+    `)
+    .eq('student_id', userId)
+    .order('created_at', { ascending: false })
+    .limit(limit);
+
+  if (questionsError) {
+    console.error('Error fetching recent activity:', questionsError);
+  }
+
+  if (!questions || questions.length === 0) {
     return (
       <Card>
         <CardHeader>
@@ -46,40 +80,34 @@ export function RecentActivity({ userId = 'mock-user-1', limit = 5 }: RecentActi
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
-          {activities.map((activity) => (
+          {questions.map((question) => (
             <div
-              key={activity.attempt.id}
+              key={question.assessment_id}
               className="flex items-start gap-4 p-3 rounded-lg border bg-card"
             >
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
                   <h3 className="font-medium text-sm truncate">
-                    {activity.skillName}
+                    {question.skills?.skill_name || 'Unknown Skill'}
                   </h3>
                   <Badge variant="outline" className="text-xs shrink-0">
-                    {activity.attempt.completed ? 'Completed' : 'In Progress'}
+                    {question.accuracy_score_0to1 !== null ? 'Completed' : 'In Progress'}
                   </Badge>
                 </div>
 
                 <p className="text-xs text-muted-foreground mb-2">
-                  {activity.timeAgo} • {formatTimeSpent(activity.attempt.time_spent_minutes)}
+                  {formatTimeAgo(question.created_at)}
                 </p>
 
-                {activity.attempt.completed && (
+                {question.accuracy_score_0to1 !== null && (
                   <div className="flex items-center gap-3">
                     <div className="flex items-center gap-1">
                       <Star size={14} className="text-yellow-500 fill-yellow-500" />
                       <span className="text-xs font-medium">
-                        {activity.attempt.enjoyment_rating}/5 enjoyment
+                        Score: {Math.round(question.accuracy_score_0to1 * 100)}%
                       </span>
                     </div>
                   </div>
-                )}
-
-                {activity.attempt.notes && (
-                  <p className="text-xs text-muted-foreground mt-2 line-clamp-1 italic">
-                    "{activity.attempt.notes}"
-                  </p>
                 )}
               </div>
             </div>
