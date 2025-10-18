@@ -40,14 +40,12 @@ career-guide/
 │       ├── layout.tsx           # Shared layout with navigation
 │       ├── onboarding/          # New user setup
 │       │   └── page.tsx
-│       ├── skills/              # Skills browser (to be built)
+│       ├── skills/              # Skills browser
 │       │   └── page.tsx
-│       ├── learn/               # Learning interface (to be built)
+│       ├── learn/               # Learning interface
 │       │   └── [problemId]/
 │       │       └── page.tsx
-│       ├── progress/            # Progress visualization (to be built)
-│       │   └── page.tsx
-│       ├── recommendations/     # Major recommendations (to be built)
+│       ├── progress/            # Progress visualization & major recommendations
 │       │   └── page.tsx
 │       └── profile/             # User profile (to be built)
 │           └── page.tsx
@@ -198,19 +196,14 @@ const generateProblem = async (skillId: string, userId: string) => {
 - **Skills Browser** - Grid/list view of available skills with categories
 - **Problem Viewer** - Display practice problem with clear instructions
 - **Interactive Workspace** - Space for students to work on problems
-- **Feedback Form** - Rating scales and text input for experience feedback
+- **Feedback Form** - Thumbs up/down rating and text input for experience feedback
 
-### 2. Recommendation Engine
+### 2. Progress & Recommendations (Combined)
+- **Major Affinity Chart** - Bar chart showing liked/disliked skills per major
 - **Match Algorithm** - Calculate major fit based on enjoyed skills
-- **Recommendation Dashboard** - Display suggested majors with explanations
-- **Skill Mapping** - Show which skills align with each major
-- **Exploration Path** - Suggest next skills to try based on current interests
-
-### 3. Progress Tracking
-- **Skills Tried** - Visual representation of explored skills
-- **Enjoyment Heatmap** - Color-coded visualization of ratings
-- **Time Investment** - Track time spent on different skill categories
-- **Major Confidence** - Show how confidence in recommendations grows
+- **Skill Mapping** - Show which skills align with each major through visualization
+- **Progress Insights** - Generate encouraging insights based on user's exploration
+- **Stats Overview** - Display skills explored, majors explored, and top matches
 
 ## Environment Variables
 
@@ -309,19 +302,16 @@ supabase
    - Submits completion or skip
 
 4. **Feedback Collection**
-   - Rate enjoyment (1-5)
-   - Rate difficulty (1-5)
-   - Optional: Add notes about the experience
+   - Get AI-generated feedback on answer
+   - Rate enjoyment with thumbs up/down (liked/disliked)
+   - Optional: Add thoughts and notes during problem solving
 
-5. **Recommendation Update**
-   - n8n workflow recalculates major matches
-   - Updates recommendation dashboard
-   - Suggests next skills to explore
-
-6. **Major Discovery**
-   - View recommended majors with match scores
-   - See skill overlap between enjoyed activities and majors
-   - Explore major details and requirements
+5. **Progress & Major Discovery**
+   - View progress page with major affinity chart
+   - See which majors align with liked skills
+   - Bar chart shows liked vs disliked skills per major
+   - Insights highlight best matching majors
+   - Continue exploring to refine recommendations
 
 ## Testing Strategy
 

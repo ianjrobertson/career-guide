@@ -57,7 +57,7 @@ export function RecommendationsPreview({ userId = 'mock-user-1' }: Recommendatio
             </CardDescription>
           </div>
           <Button asChild variant="ghost" size="sm">
-            <Link href="/protected/recommendations" className="flex items-center gap-1">
+            <Link href="/protected/progress" className="flex items-center gap-1">
               View All
               <ArrowRight size={16} />
             </Link>

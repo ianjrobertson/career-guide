@@ -52,8 +52,8 @@ export function QuestionRating({
                 </Link>
               </Button>
               <Button asChild size="lg" variant="outline">
-                <Link href="/protected/recommendations">
-                  View Recommendations
+                <Link href="/protected/progress">
+                  View Progress
                 </Link>
               </Button>
             </div>

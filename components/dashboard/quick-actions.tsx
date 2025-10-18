@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { BookOpen, TrendingUp, Lightbulb, User } from 'lucide-react';
+import { BookOpen, TrendingUp, User } from 'lucide-react';
 
 interface QuickAction {
   title: string;
@@ -27,13 +27,6 @@ const QUICK_ACTIONS: QuickAction[] = [
     color: 'text-green-500'
   },
   {
-    title: 'Recommendations',
-    description: 'Discover matching majors',
-    href: '/protected/recommendations',
-    icon: Lightbulb,
-    color: 'text-yellow-500'
-  },
-  {
     title: 'Profile',
     description: 'Manage your account',
     href: '/protected/profile',
@@ -44,7 +37,7 @@ const QUICK_ACTIONS: QuickAction[] = [
 
 export function QuickActions() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {QUICK_ACTIONS.map((action) => {
         const Icon = action.icon;
         return (

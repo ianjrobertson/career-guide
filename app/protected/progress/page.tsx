@@ -4,7 +4,7 @@ import { MajorAffinityChart } from '@/components/progress/major-affinity-chart';
 import { ProgressInsights } from '@/components/progress/progress-insights';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { TrendingUp, BookOpen, Target, Sparkles } from 'lucide-react';
+import { TrendingUp, BookOpen, Sparkles, Target } from 'lucide-react';
 import Link from 'next/link';
 import {
   getTopMajorsByAffinity,
@@ -133,14 +133,8 @@ export default async function ProgressPage() {
           <ProgressInsights insights={insights} />
 
           {/* CTA Section */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+          <div className="flex justify-center pt-4">
             <Button asChild size="lg" variant="default">
-              <Link href="/protected/recommendations" className="gap-2">
-                <Target size={18} />
-                View Detailed Recommendations
-              </Link>
-            </Button>
-            <Button asChild size="lg" variant="outline">
               <Link href="/protected/skills" className="gap-2">
                 <BookOpen size={18} />
                 Explore More Skills

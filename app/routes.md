@@ -18,7 +18,7 @@ This document outlines all routes in the Career Guide application, their purpose
 - Feature highlights
 - Call-to-action for sign up
 
-**User Flow**: Visitor ’ Sign Up or Sign In
+**User Flow**: Visitor ï¿½ Sign Up or Sign In
 
 ---
 
@@ -31,14 +31,14 @@ This document outlines all routes in the Career Guide application, their purpose
 - `/auth/forgot-password` - Password reset
 - `/auth/confirm` - Email confirmation
 
-**User Flow**: Authentication ’ Redirect to onboarding (new users) or dashboard (returning users)
+**User Flow**: Authentication ï¿½ Redirect to onboarding (new users) or dashboard (returning users)
 
 ---
 
 ## Protected Routes (Requires Authentication)
 
 ### `/onboarding` - New User Onboarding
-**Status**: ó To Build
+**Status**: ï¿½ To Build
 
 **Purpose**: Collect initial preferences to kickstart the experience
 
@@ -54,7 +54,7 @@ This document outlines all routes in the Career Guide application, their purpose
 - Read: `majors`, `skills`, `major_skills` (to show relevant skills)
 - Write: `user_profiles` (interests, current_major)
 
-**User Flow**: Sign Up ’ Onboarding ’ Dashboard
+**User Flow**: Sign Up ï¿½ Onboarding ï¿½ Dashboard
 
 **Design Notes**:
 - Keep it lightweight (< 2 minutes)
@@ -64,7 +64,7 @@ This document outlines all routes in the Career Guide application, their purpose
 ---
 
 ### `/dashboard` - Main Hub
-**Status**: ó To Build
+**Status**: ï¿½ To Build
 
 **Purpose**: Central navigation point after login, shows overview of user's journey
 
@@ -80,7 +80,7 @@ This document outlines all routes in the Career Guide application, their purpose
 - Read: `user_profiles`, `user_problem_attempts`, `user_major_recommendations`, `skills`
 - Aggregate: Count of completed problems, unique skills tried
 
-**User Flow**: Login ’ Dashboard ’ Navigate to other sections
+**User Flow**: Login ï¿½ Dashboard ï¿½ Navigate to other sections
 
 **Design Notes**:
 - Card-based layout for different sections
@@ -90,7 +90,7 @@ This document outlines all routes in the Career Guide application, their purpose
 ---
 
 ### `/skills` - Skills Browser
-**Status**: ó To Build
+**Status**: ï¿½ To Build
 
 **Purpose**: Browse and discover available skills to explore
 
@@ -99,13 +99,13 @@ This document outlines all routes in the Career Guide application, their purpose
 - Filter by category (Analytical, Creative, Technical, Social, etc.)
 - Search functionality
 - Show skill status: "Not Tried", "Tried", "Enjoyed" (based on ratings)
-- Click skill ’ Start practice problem
+- Click skill ï¿½ Start practice problem
 
 **Data Requirements**:
 - Read: `skills`, `user_problem_attempts` (to show status)
 - Group by: `category`
 
-**User Flow**: Dashboard/Nav ’ Skills Browser ’ Select Skill ’ Learning Interface
+**User Flow**: Dashboard/Nav ï¿½ Skills Browser ï¿½ Select Skill ï¿½ Learning Interface
 
 **Design Notes**:
 - Visual cards with icons for each skill
@@ -116,7 +116,7 @@ This document outlines all routes in the Career Guide application, their purpose
 ---
 
 ### `/learn/[problemId]` - Learning Interface
-**Status**: ó To Build (CORE FEATURE)
+**Status**: ï¿½ To Build (CORE FEATURE)
 
 **Purpose**: Interactive environment to practice a skill-based problem and provide feedback
 
@@ -136,7 +136,7 @@ This document outlines all routes in the Career Guide application, their purpose
 
 - **Feedback Collection**:
   - "How much did you enjoy this?" (1-5 star rating)
-  - "How difficult was this?" (1-5 scale: Too Easy ’ Too Hard)
+  - "How difficult was this?" (1-5 scale: Too Easy ï¿½ Too Hard)
   - Optional text: "What did you like or dislike?"
   - "Try Another Skill" or "See Recommendations" buttons
 
@@ -147,7 +147,7 @@ This document outlines all routes in the Career Guide application, their purpose
 
 **User Flow**:
 1. Select skill from Skills Browser
-2. n8n generates problem ’ Redirect to `/learn/[problemId]`
+2. n8n generates problem ï¿½ Redirect to `/learn/[problemId]`
 3. Student works through problem
 4. Submit feedback
 5. Option to continue or view recommendations
@@ -176,7 +176,7 @@ This document outlines all routes in the Career Guide application, their purpose
 ---
 
 ### `/progress` - Results & Progress Page
-**Status**: ó To Build (CORE FEATURE)
+**Status**: ï¿½ To Build (CORE FEATURE)
 
 **Purpose**: Visualize skills explored and how the student rated them
 
@@ -203,7 +203,7 @@ This document outlines all routes in the Career Guide application, their purpose
 - Read: `user_problem_attempts`, `skills`, `practice_problems`
 - Aggregate: Average rating by category, total time, counts
 
-**User Flow**: Dashboard/Nav ’ Progress ’ View insights ’ Return to browse skills
+**User Flow**: Dashboard/Nav ï¿½ Progress ï¿½ View insights ï¿½ Return to browse skills
 
 **Design Notes**:
 - Heavy use of data visualization (charts, heatmaps)
@@ -211,52 +211,10 @@ This document outlines all routes in the Career Guide application, their purpose
 - Export or share progress (future feature)
 - Responsive grid layout
 
----
-
-### `/recommendations` - Major Recommendations
-**Status**: ó To Build (CORE FEATURE)
-
-**Purpose**: Show personalized major recommendations based on enjoyed skills
-
-**Key Features**:
-- **Recommendation Threshold**:
-  - Show message if < 3 skills tried: "Try more skills to get recommendations"
-
-- **Major Match Cards** (sorted by match score):
-  - Major name
-  - Match percentage (0-100%)
-  - University offering
-  - Top 3 matching skills student enjoyed
-  - "Learn More" button ’ Major detail page
-
-- **Why This Match?**:
-  - Explanation: "You enjoyed Data Analysis and Problem Solving, which are key for Computer Science"
-
-- **Explore More**:
-  - Suggested skills to try to refine recommendations
-
-**Data Requirements**:
-- Read: `user_major_recommendations`, `majors`, `major_skills`, `skills`, `user_problem_attempts`
-- Calculate: Match score based on enjoyed skills × relevance scores
-
-**User Flow**:
-1. Complete 3+ problems
-2. n8n calculates recommendations
-3. User navigates to Recommendations
-4. View matches ’ Explore major details or try more skills
-
-**Design Notes**:
-- Card-based layout for each major
-- Progress bar for match percentage
-- Visual skill tags showing overlap
-- Clear explanation of matching logic (transparency builds trust)
-
----
-
 ## Additional Suggested Routes
 
 ### `/profile` - User Profile & Settings
-**Status**: ó To Build
+**Status**: ï¿½ To Build
 
 **Purpose**: Manage user information and preferences
 
@@ -287,7 +245,7 @@ This document outlines all routes in the Career Guide application, their purpose
 **Data Requirements**:
 - Read: `skills`, `major_skills`, `majors`
 
-**User Flow**: Skills Browser ’ Skill Detail ’ Start Learning
+**User Flow**: Skills Browser ï¿½ Skill Detail ï¿½ Start Learning
 
 ---
 
@@ -306,7 +264,7 @@ This document outlines all routes in the Career Guide application, their purpose
 **Data Requirements**:
 - Read: `majors`, `major_skills`, `skills`
 
-**User Flow**: Recommendations ’ Major Detail ’ Explore related skills
+**User Flow**: Recommendations ï¿½ Major Detail ï¿½ Explore related skills
 
 ---
 
@@ -348,10 +306,10 @@ This document outlines all routes in the Career Guide application, their purpose
 All routes except `/` and `/auth/*` require authentication.
 
 **Middleware checks** (`middleware.ts`):
-1. User authenticated? ’ Allow access
-2. Not authenticated? ’ Redirect to `/auth/login`
-3. Authenticated but no profile? ’ Redirect to `/onboarding`
-4. Onboarding complete? ’ Allow full app access
+1. User authenticated? ï¿½ Allow access
+2. Not authenticated? ï¿½ Redirect to `/auth/login`
+3. Authenticated but no profile? ï¿½ Redirect to `/onboarding`
+4. Onboarding complete? ï¿½ Allow full app access
 
 ---
 

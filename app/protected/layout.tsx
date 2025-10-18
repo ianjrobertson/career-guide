@@ -1,7 +1,7 @@
 import { AuthButton } from "@/components/auth-button";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import Link from "next/link";
-import { Home, BookOpen, TrendingUp, Lightbulb, User } from "lucide-react";
+import { Home, BookOpen, TrendingUp, User } from "lucide-react";
 
 const NAV_LINKS = [
   {
@@ -18,11 +18,6 @@ const NAV_LINKS = [
     href: "/protected/progress",
     label: "Progress",
     icon: TrendingUp
-  },
-  {
-    href: "/protected/recommendations",
-    label: "Recommendations",
-    icon: Lightbulb
   },
   {
     href: "/protected/profile",
@@ -75,7 +70,7 @@ export default function ProtectedLayout({
 
       {/* Mobile Navigation */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="grid grid-cols-5 gap-1 p-2">
+        <div className="grid grid-cols-4 gap-1 p-2">
           {NAV_LINKS.map((link) => {
             const Icon = link.icon;
             return (
