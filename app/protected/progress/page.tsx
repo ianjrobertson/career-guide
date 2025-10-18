@@ -1,14 +1,12 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { MajorAffinityChart } from '@/components/progress/major-affinity-chart';
-import { ProgressInsights } from '@/components/progress/progress-insights';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { TrendingUp, BookOpen, Sparkles, Target } from 'lucide-react';
 import Link from 'next/link';
 import {
   getTopMajorsByAffinity,
-  getProgressInsights,
   getProgressOverviewStats
 } from '@/lib/progress-helpers';
 
