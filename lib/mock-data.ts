@@ -486,6 +486,7 @@ export const MOCK_RECOMMENDATIONS: MajorRecommendation[] = [
 export interface UserProfile {
   id: string;
   full_name: string;
+  university: string;
   year: string;
   current_major: string | null;
   interests: string[];
@@ -496,6 +497,7 @@ export interface UserProfile {
 export const MOCK_USER_PROFILE: UserProfile = {
   id: 'mock-user-1',
   full_name: 'Alex Johnson',
+  university: 'State University',
   year: 'freshman',
   current_major: null,
   interests: ['technology', 'problem-solving', 'creative writing'],
@@ -535,6 +537,37 @@ export function getMajorsBySkillId(skillId: string): Major[] {
   return skill.major_ids
     .map(majorId => getMajorById(majorId))
     .filter(Boolean) as Major[];
+}
+
+// Save user profile updates (mock implementation)
+export function saveUserProfile(updates: Partial<UserProfile>): void {
+  if (typeof window === 'undefined') return;
+
+  const currentProfile = MOCK_USER_PROFILE;
+  const updatedProfile = {
+    ...currentProfile,
+    ...updates,
+    updated_at: new Date().toISOString()
+  };
+
+  // Save to localStorage for persistence in demo
+  localStorage.setItem('user_profile', JSON.stringify(updatedProfile));
+}
+
+// Get user profile (with localStorage override)
+export function getUserProfile(): UserProfile {
+  if (typeof window === 'undefined') return MOCK_USER_PROFILE;
+
+  const stored = localStorage.getItem('user_profile');
+  if (stored) {
+    try {
+      return JSON.parse(stored);
+    } catch {
+      return MOCK_USER_PROFILE;
+    }
+  }
+
+  return MOCK_USER_PROFILE;
 }
 
 // AI Feedback for Problem Grading
