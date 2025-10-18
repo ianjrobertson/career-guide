@@ -21,6 +21,7 @@ import {
   type LearningState
 } from '@/lib/learning-helpers';
 import { getFeedbackFromWebhook } from '@/lib/learning-helpers';
+import { addAssessmentQuestionScore } from '@/lib/supabase/assessment';
 
 interface LearningContainerProps {
   problem: PracticeProblem;
@@ -71,7 +72,22 @@ export function LearningContainer({ problem, skill, userId }: LearningContainerP
     setState('grading');
     try {
       const feedbackData = await getFeedbackFromWebhook(problem, answer, skill.id);
-      setFeedback(feedbackData);
+      setFeedback(feedbackData as any); // Accept the feedback as-is for display
+
+      // Add to assessment_questions_score table in Supabase
+      try {
+        await addAssessmentQuestionScore({
+          // Only pass accuracy_score_0to1 if present
+          ...(typeof (feedbackData as any).accuracy_score === 'number' && { accuracy_score_0to1: (feedbackData as any).accuracy_score }),
+          // assessment_id: undefined, // If you have an assessment_id, pass it here
+          feedback: feedbackData.feedback_text,
+          question: problem.content,
+          skill_id: skill.id ? Number(skill.id) : null,
+        });
+      } catch (dbError) {
+        console.error('Error saving assessment question score:', dbError);
+      }
+
       setState('graded');
     } catch (error) {
       console.error('Error getting feedback:', error);

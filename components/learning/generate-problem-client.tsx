@@ -91,21 +91,19 @@ export function GenerateProblemClient({
           )}
 
           <div className="space-y-4 w-full max-w-md">
-            <p className="text-sm font-medium">Choose difficulty level:</p>
-            
+            <p className="text-sm font-medium text-center">Choose difficulty level:</p>
+
             <div className="grid gap-3">
               <Button
                 onClick={() => handleGenerate('beginner')}
                 disabled={isGenerating}
                 size="lg"
                 variant="outline"
-                className="w-full justify-start"
+                className="w-full justify-center text-center"
               >
                 {isGenerating ? (
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                ) : (
-                  <Sparkles className="w-4 h-4 mr-2" />
-                )}
+                ) : null}
                 Beginner
               </Button>
 
@@ -114,13 +112,11 @@ export function GenerateProblemClient({
                 disabled={isGenerating}
                 size="lg"
                 variant="outline"
-                className="w-full justify-start"
+                className="w-full justify-center text-center"
               >
                 {isGenerating ? (
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                ) : (
-                  <Sparkles className="w-4 h-4 mr-2" />
-                )}
+                ) : null}
                 Intermediate
               </Button>
 
@@ -129,13 +125,11 @@ export function GenerateProblemClient({
                 disabled={isGenerating}
                 size="lg"
                 variant="outline"
-                className="w-full justify-start"
+                className="w-full justify-center text-center"
               >
                 {isGenerating ? (
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                ) : (
-                  <Sparkles className="w-4 h-4 mr-2" />
-                )}
+                ) : null}
                 Advanced
               </Button>
             </div>
