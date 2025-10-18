@@ -14,7 +14,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto flex justify-between items-center p-4 px-6">
           <div className="flex items-center gap-2">
             <Lightbulb className="h-6 w-6" />
-            <span className="font-bold text-xl">Career Guide</span>
+            <span className="font-bold text-xl">Major Labs</span>
           </div>
           <AuthButton />
         </div>
@@ -103,7 +103,7 @@ export default function Home() {
       <section className="py-20 px-6">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
-            Why Career Guide?
+            Why Major Labs?
           </h2>
 
           <div className="grid md:grid-cols-2 gap-8">
@@ -179,7 +179,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-2">
             <Lightbulb className="h-5 w-5" />
-            <span className="font-semibold">Career Guide</span>
+            <span className="font-semibold">Major Labs</span>
           </div>
           <div className="flex items-center gap-6 text-sm text-muted-foreground">
             <ThemeSwitcher />

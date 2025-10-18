@@ -9,7 +9,7 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Career Guide - Discover Your Path Through Experience",
+  title: "Major Labs - Discover Your Path Through Experience",
   description: "Stop taking quizzes. Start doing. Explore careers through hands-on practice problems and get personalized major recommendations based on what you actually enjoy.",
 };
 

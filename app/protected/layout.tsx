@@ -1,7 +1,7 @@
 import { AuthButton } from "@/components/auth-button";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import Link from "next/link";
-import { Home, BookOpen, TrendingUp, User } from "lucide-react";
+import { Home, BookOpen, TrendingUp, User, Icon, FlaskConical } from "lucide-react";
 
 const NAV_LINKS = [
   {
@@ -39,7 +39,7 @@ export default function ProtectedLayout({
           <div className="flex justify-between items-center h-16">
             {/* Logo/Brand */}
             <Link href="/protected" className="flex items-center gap-2">
-              <div className="font-bold text-xl">Career Guide</div>
+              <div className="font-bold text-xl flex space-x-2"><FlaskConical className=""/> <span className="pr-2">Major Labs</span> </div>
             </Link>
 
             {/* Desktop Navigation */}
@@ -96,7 +96,7 @@ export default function ProtectedLayout({
       <footer className="w-full border-t mt-auto">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <p className="text-center text-sm text-muted-foreground">
-            Career Guide - Discover your path through hands-on learning
+            Major Labs - Discover your path through hands-on learning
           </p>
         </div>
       </footer>

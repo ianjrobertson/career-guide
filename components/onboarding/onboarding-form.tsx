@@ -144,7 +144,7 @@ export function OnboardingForm() {
               <div className="mx-auto w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
                 <Lightbulb className="h-8 w-8 text-primary" />
               </div>
-              <CardTitle className="text-3xl">Welcome to Career Guide!</CardTitle>
+              <CardTitle className="text-3xl">Welcome to Major Labs!</CardTitle>
               <CardDescription className="text-base">
                 Let&apos;s find the perfect career path for you through hands-on exploration.
                 This will only take 2 minutes.
