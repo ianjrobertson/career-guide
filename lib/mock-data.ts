@@ -536,3 +536,82 @@ export function getMajorsBySkillId(skillId: string): Major[] {
     .map(majorId => getMajorById(majorId))
     .filter(Boolean) as Major[];
 }
+
+// AI Feedback for Problem Grading
+export interface ProblemFeedback {
+  id: string;
+  problem_id: string;
+  user_answer: string;
+  feedback_text: string;
+  strengths: string[];
+  improvements: string[];
+  generated_at: string;
+}
+
+// Mock function to simulate AI grading - will be replaced with actual AI call
+export function generateMockFeedback(
+  problemId: string,
+  userAnswer: string,
+  skillId: string
+): ProblemFeedback {
+  const skill = getSkillById(skillId);
+  const answerLength = userAnswer.trim().length;
+
+  // Generate feedback based on answer quality (length as proxy)
+  let feedbackText = '';
+  let strengths: string[] = [];
+  let improvements: string[] = [];
+
+  if (answerLength > 200) {
+    feedbackText = `Great work! You provided a thorough and well-thought-out response. Your answer demonstrates strong understanding of ${skill?.name || 'this skill'}.`;
+    strengths = [
+      'Detailed explanation',
+      'Clear reasoning',
+      'Good use of examples'
+    ];
+    improvements = [
+      'Consider organizing your thoughts with bullet points for clarity'
+    ];
+  } else if (answerLength > 100) {
+    feedbackText = `Good effort! You covered the key points and showed solid thinking around ${skill?.name || 'this skill'}. Your answer is on the right track.`;
+    strengths = [
+      'Addressed the main question',
+      'Logical approach'
+    ];
+    improvements = [
+      'Try adding more specific examples',
+      'Consider exploring alternative perspectives'
+    ];
+  } else if (answerLength > 30) {
+    feedbackText = `Nice start! You've identified some important points about ${skill?.name || 'this skill'}. With a bit more depth, this could be even stronger.`;
+    strengths = [
+      'Concise response',
+      'Got the basics right'
+    ];
+    improvements = [
+      'Expand on your reasoning',
+      'Add more details to support your answer',
+      'Consider what-if scenarios'
+    ];
+  } else {
+    feedbackText = `Thanks for giving it a try! ${skill?.name || 'This skill'} can be challenging. Don't worry about getting it perfect - the goal is to explore and learn what you enjoy.`;
+    strengths = [
+      'You engaged with the problem',
+      'Every attempt is valuable learning'
+    ];
+    improvements = [
+      'Try elaborating on your initial thoughts',
+      'Take your time to explore different angles'
+    ];
+  }
+
+  return {
+    id: `feedback-${Date.now()}`,
+    problem_id: problemId,
+    user_answer: userAnswer,
+    feedback_text: feedbackText,
+    strengths,
+    improvements,
+    generated_at: new Date().toISOString()
+  };
+}
