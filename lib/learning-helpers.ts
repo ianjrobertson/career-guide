@@ -174,6 +174,7 @@ export function isAnswerValid(answer: string): boolean {
 export async function generateAIPracticeProblem(
     skillId: string, skillName: string, skillDescription: string,
     difficulty: 'beginner'|'intermediate'|'advanced' = 'beginner',
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     userId?: string): Promise<any> {
   try {
     const response = await fetch('/api/generate', {

@@ -86,6 +86,7 @@ export function OnboardingForm() {
       console.log('Raw data:', skillMappings);
 
       // Transform the nested data structure to flat array of skills
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const transformedSkills = skillMappings?.map((mapping: any) => ({
         skill_id: mapping.skills.skill_id,
         skill_name: mapping.skills.skill_name

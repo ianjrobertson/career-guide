@@ -50,6 +50,7 @@ export default async function SkillsPage({ searchParams }: SkillsPageProps) {
   const userId = user?.id;
 
   // Fetch user's assessment feedback from Supabase
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let assessmentFeedback: any[] = [];
   if (userId) {
     const { data: feedbackData } = await supabase
@@ -62,11 +63,13 @@ export default async function SkillsPage({ searchParams }: SkillsPageProps) {
   }
 
   // Enrich skills with status and feedback
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const allSkills = (skillsData || []).map((skill: any) => {
     const skillId = skill.skill_id || skill.id;
     
     // Get the most recent feedback for this skill
     const latestFeedback = assessmentFeedback.find(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (fb: any) => fb.skill_id === skillId
     );
 

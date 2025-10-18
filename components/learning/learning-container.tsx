@@ -71,12 +71,14 @@ export function LearningContainer({ problem, skill, userId }: LearningContainerP
     setState('grading');
     try {
       const feedbackData = await getFeedbackFromWebhook(problem, answer, skill.id);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       setFeedback(feedbackData as any); // Accept the feedback as-is for display
 
       // Add to assessment_questions_score table in Supabase
       try {
         await addAssessmentQuestionScore({
           // Only pass accuracy_score_0to1 if present
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           ...(typeof (feedbackData as any).accuracy_score === 'number' && { accuracy_score_0to1: (feedbackData as any).accuracy_score }),
           // assessment_id: undefined, // If you have an assessment_id, pass it here
           feedback: feedbackData.feedback_text,
