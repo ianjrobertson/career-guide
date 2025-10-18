@@ -3,7 +3,6 @@ import { createClient } from "@/lib/supabase/server";
 import { BookOpen } from "lucide-react";
 import { StatsCard } from "@/components/dashboard/stats-card";
 import { RecommendationsPreview } from "@/components/dashboard/recommendations-preview";
-import { ContinueLearning } from "@/components/dashboard/continue-learning";
 import { RecentActivity } from "@/components/dashboard/recent-activity";
 import { QuickActions } from "@/components/dashboard/quick-actions";
 import { getEncouragementMessage } from "@/lib/dashboard-helpers";

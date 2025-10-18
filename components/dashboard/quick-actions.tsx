@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Card, CardContent } from '@/components/ui/card';
-import { BookOpen, TrendingUp, User } from 'lucide-react';
+import { BookOpen, TrendingUp} from 'lucide-react';
 
 interface QuickAction {
   title: string;
