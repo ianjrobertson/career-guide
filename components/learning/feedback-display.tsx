@@ -1,7 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { CheckCircle2, Sparkles } from 'lucide-react';
-import type { ProblemFeedback } from '@/lib/mock-data';
 import { useEffect, useState, useRef } from 'react';
 import Confetti from 'react-confetti';
 

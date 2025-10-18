@@ -1,13 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Loader2, Sparkles, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { generateAIPracticeProblem } from '@/lib/learning-helpers';
-import type { PracticeProblem } from '@/lib/mock-data';
 
 interface GenerateProblemClientProps {
   skillId: string;
@@ -25,7 +24,7 @@ export function GenerateProblemClient({
   const router = useRouter();
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [generatedProblem, setGeneratedProblem] = useState<PracticeProblem | null>(null);
+  //const [generatedProblem, setGeneratedProblem] = useState<PracticeProblem | null>(null);
 
   const handleGenerate = async (difficulty: 'beginner' | 'intermediate' | 'advanced') => {
     setIsGenerating(true);
@@ -40,7 +39,7 @@ export function GenerateProblemClient({
         userId
       );
 
-      setGeneratedProblem(problem);
+      //setGeneratedProblem(problem);
       
       // Store the generated problem in sessionStorage so it can be accessed by the learning page
       sessionStorage.setItem(`generated_problem_${problem.id}`, JSON.stringify(problem));

@@ -1,6 +1,6 @@
 'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { useState } from 'react';
 import { Lightbulb, ChevronDown, ChevronUp } from 'lucide-react';
 import type { PracticeProblem, Skill } from '@/lib/mock-data';

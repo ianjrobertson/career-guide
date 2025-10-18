@@ -7,8 +7,7 @@ import { BookOpen, Sparkles } from 'lucide-react';
 import {
   applyFilters,
   paginateSkills,
-  type SkillFilters,
-  getSkillStatus
+  type SkillFilters
 } from '@/lib/skills-helpers';
 
 interface SkillsPageProps {
@@ -154,7 +153,7 @@ export default async function SkillsPage({ searchParams }: SkillsPageProps) {
           </div>
           <h3 className="text-lg font-semibold mb-2">No skills found</h3>
           <p className="text-sm text-muted-foreground max-w-md mb-6">
-            We couldn't find any skills matching your filters. Try adjusting your search criteria or clearing the filters.
+            We couldn&apos;t find any skills matching your filters. Try adjusting your search criteria or clearing the filters.
           </p>
         </div>
       ) : (

@@ -21,7 +21,7 @@ export function ContinueLearning({ userId = 'mock-user-1' }: ContinueLearningPro
             Continue Learning
           </CardTitle>
           <CardDescription>
-            You've explored all available skills!
+            You&apos;ve explored all available skills!
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -43,7 +43,7 @@ export function ContinueLearning({ userId = 'mock-user-1' }: ContinueLearningPro
               Continue Learning
             </CardTitle>
             <CardDescription>
-              Skills we think you'll enjoy based on your interests
+              Skills we think you&apos;ll enjoy based on your interests
             </CardDescription>
           </div>
           <Button asChild variant="ghost" size="sm">
@@ -56,7 +56,7 @@ export function ContinueLearning({ userId = 'mock-user-1' }: ContinueLearningPro
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
-          {suggestedSkills.map((suggestion, index) => (
+          {suggestedSkills.map((suggestion) => (
             <div
               key={suggestion.skill.id}
               className="p-4 rounded-lg border bg-card hover:bg-accent/50 transition-colors"

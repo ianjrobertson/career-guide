@@ -4,7 +4,7 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 interface MajorSelectorProps {
   selectedMajorId: number;
@@ -22,7 +22,7 @@ export function MajorSelector({ selectedMajorId, onSelect }: MajorSelectorProps)
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const getMajors = async () => {
+  const getMajors = useCallback( async () => {
     try {
       setIsLoading(true);
       setError(null);
@@ -40,11 +40,11 @@ export function MajorSelector({ selectedMajorId, onSelect }: MajorSelectorProps)
     } finally {
       setIsLoading(false);
     }
-  }
+  }, [supabase])
 
   useEffect(() => {
     getMajors();
-  }, [])
+  }, [getMajors])
 
 
   if (isLoading) {

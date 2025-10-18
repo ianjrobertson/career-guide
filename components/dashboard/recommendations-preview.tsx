@@ -66,7 +66,7 @@ export function RecommendationsPreview({ userId = 'mock-user-1' }: Recommendatio
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {topRecommendations.map((rec, index) => (
+          {topRecommendations.map((rec) => (
             <div
               key={rec.recommendation.id}
               className="p-4 rounded-lg border bg-card hover:bg-accent/50 transition-colors"

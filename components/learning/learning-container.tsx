@@ -9,7 +9,6 @@ import { Badge } from '@/components/ui/badge';
 import { Clock } from 'lucide-react';
 import type { PracticeProblem, Skill, ProblemFeedback } from '@/lib/mock-data';
 import {
-  getAIFeedback,
   saveDraft,
   loadDraft,
   clearDraft,

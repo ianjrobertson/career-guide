@@ -25,7 +25,7 @@ export function AnswerWorkspace({
       <CardHeader>
         <CardTitle className="text-lg">Your Answer</CardTitle>
         <p className="text-sm text-muted-foreground">
-          Take your time and explore your thinking. There's no single right answer!
+          Take your time and explore your thinking. There&apos;s no single right answer!
         </p>
       </CardHeader>
 

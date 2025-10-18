@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Star, Clock, CheckCircle2, AlertCircle, ThumbsUp, ThumbsDown } from 'lucide-react';
+import { Star, Clock, ThumbsUp, ThumbsDown } from 'lucide-react';
 import type { SkillWithStatus } from '@/lib/skills-helpers';
 import { getStatusColorClasses, getStatusText } from '@/lib/skills-helpers';
 import { getMajorsBySkillId } from '@/lib/mock-data';
