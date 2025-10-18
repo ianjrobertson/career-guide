@@ -14,7 +14,7 @@ import {
 import { Search, X } from 'lucide-react';
 import { MOCK_MAJORS } from '@/lib/mock-data';
 import { getUniqueCategories } from '@/lib/skills-helpers';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 export function SkillsFilters() {
   const router = useRouter();
@@ -31,19 +31,8 @@ export function SkillsFilters() {
   const categories = getUniqueCategories();
   const majors = MOCK_MAJORS;
 
-  // Update search param with debounce
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (searchQuery !== currentSearch) {
-        updateFilters({ search: searchQuery });
-      }
-    }, 300);
-
-    return () => clearTimeout(timer);
-  }, [searchQuery]);
-
   // Update URL search params
-  const updateFilters = (updates: Record<string, string>) => {
+  const updateFilters = useCallback((updates: Record<string, string>) => {
     const params = new URLSearchParams(searchParams.toString());
 
     Object.entries(updates).forEach(([key, value]) => {
@@ -58,7 +47,18 @@ export function SkillsFilters() {
     params.delete('page');
 
     router.push(`/protected/skills?${params.toString()}`);
-  };
+  }, [router, searchParams]);
+
+  // Update search param with debounce
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (searchQuery !== currentSearch) {
+        updateFilters({ search: searchQuery });
+      }
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery, currentSearch, updateFilters]);
 
   const clearFilters = () => {
     setSearchQuery('');
