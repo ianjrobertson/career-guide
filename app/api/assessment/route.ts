@@ -26,7 +26,8 @@ export async function POST(request: Request) {
     console.log('====================');
 
     const body = await request.json();
-    const {accuracy_score_0to1, feedback, question, skill_id} = body;
+    const {accuracy_score_0to1, feedback, question, skill_id, user_liked} =
+        body;
 
     // Prepare insert data
     const insertData: any = {
@@ -34,6 +35,7 @@ export async function POST(request: Request) {
       feedback,
       question,
       skill_id,
+      user_liked,
     };
 
     // Add id if found

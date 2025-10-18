@@ -97,9 +97,19 @@ export function LearningContainer({ problem, skill, userId }: LearningContainerP
 
   // Handle rating submission
   const handleSubmitRating = useCallback(
-    (liked: boolean) => {
+    async (liked: boolean) => {
       const timeSpent = calculateTimeSpent(startTime);
       const encouragementMsg = getEncouragementMessage(liked);
+
+      // Update the assessment with user's rating
+      try {
+        await addAssessmentQuestionScore({
+          skill_id: skill.id ? Number(skill.id) : null,
+          user_liked: liked,
+        });
+      } catch (dbError) {
+        console.error('Error updating assessment with user rating:', dbError);
+      }
 
       // Save attempt
       saveProblemAttempt({
@@ -119,7 +129,7 @@ export function LearningContainer({ problem, skill, userId }: LearningContainerP
       setEncouragement(encouragementMsg);
       setState('completed');
     },
-    [startTime, userId, problem.id, skill.id, answer]
+    [startTime, userId, problem, skill.id, answer]
   );
 
   return (

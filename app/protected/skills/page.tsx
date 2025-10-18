@@ -5,17 +5,16 @@ import { SkillsFilters } from '@/components/skills/skills-filters';
 import { SkillsPagination } from '@/components/skills/skills-pagination';
 import { BookOpen, Sparkles } from 'lucide-react';
 import {
-  getSkillsWithStatus,
   applyFilters,
   paginateSkills,
-  type SkillFilters
+  type SkillFilters,
+  getSkillStatus
 } from '@/lib/skills-helpers';
 
 interface SkillsPageProps {
   searchParams: Promise<{
     page?: string;
     major?: string;
-    category?: string;
     search?: string;
   }>;
 }
@@ -35,17 +34,55 @@ export default async function SkillsPage({ searchParams }: SkillsPageProps) {
   // Parse search params
   const currentPage = parseInt(params.page || '1', 10);
   const selectedMajor = params.major || '';
-  const selectedCategory = params.category || '';
   const searchQuery = params.search || '';
 
-  // Get all skills with user status
-  const userId = 'mock-user-1';
-  const allSkills = getSkillsWithStatus(userId);
+
+  // Fetch all skills from Supabase
+  const { data: skillsData, error: skillsError } = await supabase
+    .from('skills')
+    .select('*');
+
+  if (skillsError) {
+    throw new Error('Failed to fetch skills from Supabase');
+  }
+
+  // Get current user
+  const { data: { user } } = await supabase.auth.getUser();
+  const userId = user?.id;
+
+  // Fetch user's assessment feedback from Supabase
+  let assessmentFeedback: any[] = [];
+  if (userId) {
+    const { data: feedbackData } = await supabase
+      .from('assessment_questions_score')
+      .select('skill_id, user_liked, created_at')
+      .eq('student_id', userId)
+      .order('created_at', { ascending: false });
+    
+    assessmentFeedback = feedbackData || [];
+  }
+
+  // Enrich skills with status and feedback
+  const allSkills = (skillsData || []).map((skill: any) => {
+    const skillId = skill.skill_id || skill.id;
+    
+    // Get the most recent feedback for this skill
+    const latestFeedback = assessmentFeedback.find(
+      (fb: any) => fb.skill_id === skillId
+    );
+
+    return {
+      ...skill,
+      id: skillId, // Ensure id is available for compatibility
+      status: latestFeedback ? 'tried' : 'not-tried',
+      userLiked: latestFeedback?.user_liked ?? null,
+    };
+  });
 
   // Apply filters
   const filters: SkillFilters = {
     majorIds: selectedMajor ? [selectedMajor] : [],
-    category: selectedCategory || null,
+    category: null,
     searchQuery: searchQuery || undefined
   };
 
@@ -56,8 +93,9 @@ export default async function SkillsPage({ searchParams }: SkillsPageProps) {
 
   // Calculate stats
   const totalSkills = allSkills.length;
-  const triedSkills = allSkills.filter(s => s.status !== 'not-tried').length;
-  const enjoyedSkills = allSkills.filter(s => s.status === 'enjoyed').length;
+  const triedSkills = allSkills.filter(s => s.userLiked !== null).length;
+  const enjoyedSkills = allSkills.filter(s => s.userLiked === true).length;
+  const dislikedSkills = allSkills.filter(s => s.userLiked === false).length;
 
   return (
     <div className="flex flex-col gap-8">
@@ -84,15 +122,21 @@ export default async function SkillsPage({ searchParams }: SkillsPageProps) {
             </span>
           </div>
           <div className="flex items-center gap-2 text-sm">
-            <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-            <span className="text-muted-foreground">
-              {triedSkills} tried
-            </span>
-          </div>
-          <div className="flex items-center gap-2 text-sm">
             <div className="w-2 h-2 rounded-full bg-green-500"></div>
             <span className="text-muted-foreground">
               {enjoyedSkills} enjoyed
+            </span>
+          </div>
+          <div className="flex items-center gap-2 text-sm">
+            <div className="w-2 h-2 rounded-full bg-gray-500"></div>
+            <span className="text-muted-foreground">
+              {dislikedSkills} not enjoyed
+            </span>
+          </div>
+          <div className="flex items-center gap-2 text-sm">
+            <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+            <span className="text-muted-foreground">
+              {totalSkills - triedSkills} not tried
             </span>
           </div>
         </div>
@@ -117,8 +161,8 @@ export default async function SkillsPage({ searchParams }: SkillsPageProps) {
         <>
           {/* Skills Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {paginatedData.items.map((skill) => (
-              <SkillCard key={skill.id} skill={skill} />
+            {paginatedData.items.map((skill, idx) => (
+              <SkillCard key={skill.id ?? idx} skill={skill} />
             ))}
           </div>
 
