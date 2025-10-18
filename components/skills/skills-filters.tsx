@@ -28,45 +28,12 @@ export function SkillsFilters() {
 
   // Get current filter values from URL
   const currentSearch = searchParams.get('search') || '';
-  const currentMajor = searchParams.get('major') || '';
+  // const currentMajor = searchParams.get('major') || '';
 
   // Local state for search input (for debouncing)
   const [searchQuery, setSearchQuery] = useState(currentSearch);
 
-  // Fetch majors from Supabase
-  useEffect(() => {
-    const fetchMajors = async () => {
-      const supabase = createClient();
-      
-      try {
-        console.log('Fetching majors...');
-        const { data: majorsData, error } = await supabase
-          .from('majors')
-          .select('major_id, major_name')
-          .order('major_name');
-
-        if (error) {
-          throw error;
-        }
-
-        console.log('Raw majors data:', majorsData);
-        
-        if (!majorsData || majorsData.length === 0) {
-          console.log('No majors found in the database');
-          setMajors([]);
-          return;
-        }
-
-        setMajors(majorsData);
-
-      } catch (err) {
-        console.error('Error fetching majors:', err);
-        setMajors([]);
-      }
-    };
-
-    fetchMajors();
-  }, []);
+  // const majors = MOCK_MAJORS;
 
   // Update URL search params
   const updateFilters = useCallback((updates: Record<string, string>) => {
@@ -102,11 +69,11 @@ export function SkillsFilters() {
     router.push('/protected/skills');
   };
 
-  const hasActiveFilters = currentSearch || currentMajor;
+  const hasActiveFilters = !!currentSearch;
 
   return (
     <div className="space-y-4">
-      {/* Search and Major Filter Row */}
+      {/* Search Row Only */}
       <div className="flex flex-col md:flex-row gap-3">
         {/* Search */}
         <div className="relative flex-1">
@@ -119,24 +86,6 @@ export function SkillsFilters() {
             className="pl-10"
           />
         </div>
-
-        {/* Major Filter */}
-        <Select
-          value={currentMajor || 'all'}
-          onValueChange={(value) => updateFilters({ major: value === 'all' ? '' : value })}
-        >
-          <SelectTrigger className="w-full md:w-[280px]">
-            <SelectValue placeholder="Filter by major" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Majors</SelectItem>
-            {majors.map((major) => (
-              <SelectItem key={major.major_id} value={major.major_id.toString()}>
-                {major.major_name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
 
         {/* Clear Filters */}
         {hasActiveFilters && (
@@ -163,17 +112,6 @@ export function SkillsFilters() {
                   setSearchQuery('');
                   updateFilters({ search: '' });
                 }}
-                className="ml-1 hover:bg-muted-foreground/20 rounded-full p-0.5"
-              >
-                <X size={12} />
-              </button>
-            </Badge>
-          )}
-          {currentMajor && (
-            <Badge variant="secondary" className="gap-1">
-              Major: {majors.find(m => m.major_id.toString() === currentMajor)?.major_name}
-              <button
-                onClick={() => updateFilters({ major: '' })}
                 className="ml-1 hover:bg-muted-foreground/20 rounded-full p-0.5"
               >
                 <X size={12} />

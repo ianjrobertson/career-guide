@@ -39,9 +39,9 @@ export default async function ProtectedPage() {
   //console.log(questions)
 
   return (
-    <div className="flex-1 w-full flex flex-col gap-8">
+    <div className="flex-1 w-full flex flex-col items-center gap-8">
       {/* Welcome Header */}
-      <div className="space-y-2">
+      <div className="w-full max-w-5xl mx-auto space-y-2 text-center">
         <h1 className="text-3xl font-bold tracking-tight">
           Welcome back, {userName}!
         </h1>
@@ -50,8 +50,8 @@ export default async function ProtectedPage() {
         </p>
       </div>
 
-      {/* Top Bar: Stats Overview + Quick Links */}
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      {/* Stats Overview & Quick Actions */}
+      <div className="w-full max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4">
         <StatsCard
           title="Skills Explored"
           value={questions?.length ?? 0}
@@ -59,32 +59,18 @@ export default async function ProtectedPage() {
           icon={BookOpen}
           iconColor="text-blue-500"
         />
-        {/* Browse Skills Card - now using StatsCard */}
-        <StatsCard
-          title="Browse Skills"
-          value={''}
-          description="Explore new skills to try"
-          icon={BookOpen}
-          iconColor="text-blue-500"
-        />
-        <Link href="/protected/skills" className="absolute inset-0" tabIndex={-1} aria-label="Browse Skills" />
-        {/* View Progress Card - now using StatsCard */}
-        <StatsCard
-          title="View Progress"
-          value={''}
-          description="See your learning journey"
-          icon={TrendingUp}
-          iconColor="text-green-500"
-        />
-        <Link href="/protected/progress" className="absolute inset-0" tabIndex={-1} aria-label="View Progress" />
+        <QuickActions />
       </div>
 
-      {/* Main Content Grid - rearranged to fill space */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-        <div className="h-full flex flex-col">
+      {/* Recommendations & Recent Activity - Responsive Row */}
+      <div className="w-full max-w-5xl mx-auto flex flex-col lg:flex-row gap-6 justify-center items-stretch">
+        {/* Recommendations (left on wide screens) */}
+        <div className="flex-1 space-y-6">
           <RecommendationsPreview userId={user.id} />
         </div>
-        <div className="h-full flex flex-col">
+
+        {/* Recent Activity (right on wide screens) */}
+        <div className="flex-1 space-y-6">
           <RecentActivity userId={user.id} limit={5} />
         </div>
       </div>
