@@ -17,6 +17,14 @@ export default async function ProtectedPage() {
     redirect("/auth/login");
   }
 
+  const onboarded = await supabase.from('profiles').select('onboarded').eq('id', user.id);
+  if (onboarded.data) {
+  const onboardedResult = onboarded.data[0].onboarded
+    if (!onboardedResult) {
+      redirect("/protected/onboarding")
+    }
+  }
+
   // Get user's email for display name
   const userName = user.email?.split('@')[0] || 'there';
 
@@ -29,7 +37,7 @@ export default async function ProtectedPage() {
     console.log(questionsError)
   }
 
-  console.log(questions)
+  //console.log(questions)
 
   return (
     <div className="flex-1 w-full flex flex-col gap-8">
