@@ -1,11 +1,11 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { BookOpen } from "lucide-react";
+import { BookOpen, TrendingUp } from "lucide-react";
 import { StatsCard } from "@/components/dashboard/stats-card";
 import { RecommendationsPreview } from "@/components/dashboard/recommendations-preview";
 import { RecentActivity } from "@/components/dashboard/recent-activity";
-import { QuickActions } from "@/components/dashboard/quick-actions";
 import { getEncouragementMessage } from "@/lib/dashboard-helpers";
+import Link from "next/link";
 
 export default async function ProtectedPage() {
   const supabase = await createClient();

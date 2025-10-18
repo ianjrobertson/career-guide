@@ -4,17 +4,13 @@ import {getUserAttempts, MOCK_SKILLS, type Skill, type UserProblemAttempt} from 
 export type SkillStatus = 'not-tried'|'tried'|'enjoyed'|'disliked';
 
 // Enriched skill with user attempt data
-export interface SkillWithStatus extends Skill {
-  skill_id?: number;           // From Supabase
-  skill_name?: string;         // From Supabase
-  skill_description?: string;  // From Supabase
+export interface SkillWithStatus {
+  skill_id: string;           // From Supabase
+  skill_name: string;         // From Supabase
+  skill_description: string;  // From Supabase
   status: SkillStatus;
   userLiked?: boolean|null;  // User's rating: liked or disliked
-  attemptData?: {
-    enjoymentRating: number; difficultyRating: number; timeSpent: number;
-    lastAttemptDate: string;
-    notes?: string;
-  };
+  major_ids?: string[];      // Associated major IDs
 }
 
 // Pagination settings

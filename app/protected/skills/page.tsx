@@ -36,10 +36,24 @@ export default async function SkillsPage({ searchParams }: SkillsPageProps) {
   const searchQuery = params.search || '';
 
 
-  // Fetch all skills from Supabase
-  const { data: skillsData, error: skillsError } = await supabase
+  // Fetch all skills with their major mappings from Supabase
+  let query = supabase
     .from('skills')
-    .select('skill_id, skill_name, skill_description');
+    .select(`
+      skill_id,
+      skill_name,
+      skill_description,
+      major_skills_mapping!inner (
+        major_id
+      )
+    `);
+
+  // Add major filter if specified
+  if (selectedMajor) {
+    query = query.eq('major_skills_mapping.major_id', selectedMajor);
+  }
+
+  const { data: skillsData, error: skillsError } = await query;
 
   if (skillsError) {
     console.error('Supabase skills query error:', skillsError);
@@ -63,22 +77,23 @@ export default async function SkillsPage({ searchParams }: SkillsPageProps) {
     assessmentFeedback = feedbackData || [];
   }
 
-  // Enrich skills with status and feedback
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const allSkills = (skillsData || []).map((skill: any) => {
-    const skillId = skill.skill_id || skill.id;
-    
-    // Get the most recent feedback for this skill
+  // Transform skills data and merge with user feedback
+  const allSkills = skillsData.map((skill: any) => {
+    const skillId = skill.skill_id;
     const latestFeedback = assessmentFeedback.find(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (fb: any) => fb.skill_id === skillId
     );
+
+    // Get array of major_ids from the major_skills_mapping, always as strings
+    const majorIds = skill.major_skills_mapping.map((mapping: any) => String(mapping.major_id));
 
     return {
       ...skill,
       id: skillId, // Ensure id is available for compatibility
       status: latestFeedback ? 'tried' : 'not-tried',
       userLiked: latestFeedback?.user_liked ?? null,
+      major_ids: majorIds // Add the major_ids array as strings
     };
   });
 

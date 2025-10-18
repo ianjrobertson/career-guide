@@ -4,12 +4,27 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Search, X } from 'lucide-react';
+import { createClient } from '@/lib/supabase/client';
 import { useState, useEffect, useCallback } from 'react';
+
+interface Major {
+  major_id: number;
+  major_name: string;
+  major_description?: string;
+}
 
 export function SkillsFilters() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [majors, setMajors] = useState<Major[]>([]);
 
   // Get current filter values from URL
   const currentSearch = searchParams.get('search') || '';
