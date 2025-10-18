@@ -5,8 +5,9 @@ export type SkillStatus = 'not-tried'|'tried'|'enjoyed'|'disliked';
 
 // Enriched skill with user attempt data
 export interface SkillWithStatus extends Skill {
-  skill_id?: number;    // From Supabase
-  skill_name?: string;  // From Supabase
+  skill_id?: number;           // From Supabase
+  skill_name?: string;         // From Supabase
+  skill_description?: string;  // From Supabase
   status: SkillStatus;
   userLiked?: boolean|null;  // User's rating: liked or disliked
   attemptData?: {

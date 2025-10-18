@@ -39,10 +39,11 @@ export default async function SkillsPage({ searchParams }: SkillsPageProps) {
   // Fetch all skills from Supabase
   const { data: skillsData, error: skillsError } = await supabase
     .from('skills')
-    .select('*');
+    .select('skill_id, skill_name, skill_description');
 
   if (skillsError) {
-    throw new Error('Failed to fetch skills from Supabase');
+    console.error('Supabase skills query error:', skillsError);
+    throw new Error(`Failed to fetch skills from Supabase: ${skillsError.message}`);
   }
 
   // Get current user
