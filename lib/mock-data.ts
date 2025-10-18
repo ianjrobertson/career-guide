@@ -520,3 +520,19 @@ export function getUserRecommendations(userId: string = 'mock-user-1'): MajorRec
   return MOCK_RECOMMENDATIONS.filter(r => r.user_id === userId)
     .sort((a, b) => b.match_score - a.match_score);
 }
+
+// Get all unique skill categories
+export function getSkillCategories(): string[] {
+  const categories = new Set(MOCK_SKILLS.map(skill => skill.category));
+  return Array.from(categories).sort();
+}
+
+// Get majors that include a specific skill
+export function getMajorsBySkillId(skillId: string): Major[] {
+  const skill = getSkillById(skillId);
+  if (!skill) return [];
+
+  return skill.major_ids
+    .map(majorId => getMajorById(majorId))
+    .filter(Boolean) as Major[];
+}
